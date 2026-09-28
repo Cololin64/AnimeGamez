@@ -1,0 +1,1579 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#08090d">
+<title>Anime Gamez</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap');
+
+:root { font-family: "DM Sans", sans-serif; color:#f5f4f2; background:#08090d; font-synthesis:none; }
+* { box-sizing:border-box; }
+body { margin:0; min-width:320px; background:
+  radial-gradient(circle at 70% -10%, rgba(221,65,93,.16), transparent 32rem),
+  radial-gradient(circle at 10% 25%, rgba(111,66,193,.12), transparent 26rem), #08090d; }
+button,input { font:inherit; }
+button { cursor:pointer; }
+.page { width:min(1180px, calc(100% - 32px)); margin:auto; padding:54px 0 80px; }
+.hero { padding:48px 0 36px; }
+.hero.compact { text-align:center; }
+.eyebrow { letter-spacing:.22em; font-size:.72rem; font-weight:800; color:#ef5774; }
+.hero h1 { font-family:Manrope,sans-serif; margin:12px 0 14px; font-size:clamp(2.8rem,7vw,6.6rem); line-height:.94; letter-spacing:-.06em; }
+.hero h1 em { color:#ef5774; font-style:normal; }
+.hero p,.section-title p { color:#9498a4; margin:0; }
+.panel { border:1px solid #242630; background:rgba(14,15,21,.86); border-radius:20px; padding:24px; margin:18px 0; backdrop-filter:blur(14px); }
+.section-title { display:flex; gap:14px; align-items:center; margin-bottom:20px; }
+.section-title>b { color:#ef5774; font:800 .78rem Manrope; border:1px solid #5b2633; padding:8px; border-radius:10px; }
+.section-title h2 { margin:0 0 4px; font:800 1.2rem Manrope; }
+.section-title .ghost { margin-left:auto; }
+.input-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.input-row { display:flex; gap:8px; background:#0a0b10; border:1px solid #242630; padding:6px; border-radius:14px; }
+input { width:100%; border:0; outline:0; padding:12px 13px; color:#fff; background:transparent; }
+.input-row button,.primary,.ghost { border:0; border-radius:10px; padding:11px 15px; color:#fff; background:#252833; font-weight:700; }
+.primary { background:#ef5774; margin-top:20px; }
+.ghost { background:#161820; color:#b9bdc8; }
+.message { color:#b9bdc8; margin:14px 0 0; }
+.anime-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:12px; max-height:560px; overflow:auto; padding-right:4px; }
+.anime-tile { position:relative; padding:0; overflow:hidden; text-align:left; border:1px solid #292b34; background:#111219; color:#fff; border-radius:14px; min-width:0; }
+.anime-tile img,.placeholder { width:100%; aspect-ratio:2/3; object-fit:contain; background:#0d0e13; display:block; background:#20222b; filter:saturate(.8); }
+.anime-tile span { display:block; padding:10px; font-size:.82rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.anime-tile i { position:absolute; top:8px; right:8px; width:27px; height:27px; display:grid; place-items:center; border-radius:50%; background:rgba(8,9,13,.82); font-style:normal; }
+.anime-tile.active { border-color:#ef5774; box-shadow:0 0 0 1px #ef5774 inset; }
+.anime-tile.active i { background:#ef5774; }
+.settings { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+label { display:block; color:#969aa5; font-size:.78rem; text-transform:uppercase; letter-spacing:.12em; margin-bottom:10px; }
+.segmented,.rounds { display:flex; gap:7px; flex-wrap:wrap; }
+.segmented button,.rounds button { flex:1; min-width:70px; border:1px solid #2c2e37; color:#b9bdc8; background:#111219; padding:12px; border-radius:11px; }
+.segmented .active,.rounds .active { color:#fff; background:#262832; border-color:#ef5774; }
+.rounds input { width:92px; border:1px solid #2c2e37; border-radius:11px; background:#111219; }
+.launch { margin-top:24px; width:100%; border:0; border-radius:14px; padding:17px; font:800 .9rem Manrope; letter-spacing:.08em; background:#ef5774; color:white; }
+.launch:disabled { opacity:.45; cursor:not-allowed; }
+.game-shell { min-height:100vh; width:min(520px, calc(100% - 28px)); margin:auto; display:flex; flex-direction:column; justify-content:center; padding:24px 0; }
+.progress-row { display:flex; justify-content:space-between; align-items:center; font-size:.8rem; letter-spacing:.08em; }
+.progress-row span { color:#ef5774; font-weight:800; }
+.progress-row b { color:#a9adb8; }
+.progress { height:3px; background:#252731; margin:12px 0 18px; border-radius:2px; overflow:hidden; }
+.progress i { display:block; height:100%; background:#ef5774; }
+.character-card { position:relative; overflow:hidden; min-height:64vh; max-height:720px; border-radius:24px; border:1px solid #292b34; background:#111219; box-shadow:0 24px 80px rgba(0,0,0,.45); }
+.character-card img { width:100%; height:100%; min-height:64vh; max-height:720px; object-fit:contain; object-position:center; display:block; background:#0d0e13; }
+.shade { position:absolute; inset:40% 0 0; background:linear-gradient(transparent,rgba(5,5,8,.95)); }
+.character-meta { position:absolute; left:24px; right:24px; bottom:22px; }
+.character-meta small { color:#ef8da0; font-weight:700; }
+.character-meta h1 { margin:4px 0 0; font:800 clamp(2rem,8vw,3.4rem) Manrope; line-height:1; letter-spacing:-.045em; }
+.actions { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:16px; }
+.actions button { border-radius:15px; padding:16px; border:1px solid; font-weight:800; letter-spacing:.08em; }
+.actions span { font-size:1.15rem; margin-right:7px; }
+.pass { color:#c9ccd5; background:#12131a; border-color:#353843!important; }
+.smash { color:white; background:#ef5774; border-color:#ef5774!important; }
+.hint { color:#626673; text-align:center; font-size:.76rem; }
+.result-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+.result-grid article { display:flex; gap:10px; align-items:center; background:#111219; border:1px solid #252731; border-radius:12px; padding:8px; min-width:0; }
+.result-grid img { width:52px; height:68px; object-fit:contain; background:#0d0e13; border-radius:8px; }
+.result-grid div { min-width:0; }
+.result-grid b,.result-grid span { display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.result-grid span { color:#777b87; font-size:.75rem; margin-top:3px; }
+
+@media (max-width:850px) {
+  .anime-grid { grid-template-columns:repeat(4,1fr); }
+  .input-grid,.settings { grid-template-columns:1fr; }
+  .result-grid { grid-template-columns:repeat(2,1fr); }
+}
+@media (max-width:540px) {
+  .page { width:min(100% - 20px,1180px); padding-top:20px; }
+  .hero { padding-top:24px; }
+  .panel { padding:16px; border-radius:16px; }
+  .anime-grid { grid-template-columns:repeat(3,1fr); }
+  .input-row { flex-direction:column; }
+  .section-title { align-items:flex-start; }
+  .section-title .ghost { font-size:.72rem; padding:8px; }
+  .character-card,.character-card img { min-height:62vh; }
+}
+
+/* Standalone overrides */
+button:disabled{opacity:.45;cursor:not-allowed}
+#app{min-height:100vh}
+
+.kmm-shell{min-height:100vh;width:min(1180px,calc(100% - 28px));margin:auto;padding:28px 0;display:flex;flex-direction:column;justify-content:center}
+.kmm-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.kmm-card{position:relative;overflow:hidden;border:1px solid #292b34;background:#111219;border-radius:20px}
+.kmm-card>img{width:100%;aspect-ratio:2/3;object-fit:contain;object-position:center;display:block;background:#0d0e13}
+.kmm-meta{padding:14px 14px 6px}.kmm-meta small{color:#ef8da0}.kmm-meta h2{font:800 1.25rem Manrope;margin:3px 0 5px}
+.kmm-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;padding:8px}
+.kmm-actions button{border:1px solid #30323b;background:#171820;color:#c9ccd5;border-radius:9px;padding:10px 4px;font-size:.75rem;font-weight:700}
+.kmm-actions button.active{border-color:#ef5774;background:#ef5774;color:white}
+@media(max-width:700px){.kmm-grid{gap:7px}.kmm-card{border-radius:13px}.kmm-meta{padding:8px}.kmm-meta h2{font-size:.9rem}.kmm-meta small{font-size:.65rem}.kmm-actions{grid-template-columns:1fr;padding:6px}.kmm-actions button{padding:7px 2px;font-size:.68rem}.kmm-shell{padding:14px 0}}
+
+.input-grid.single{grid-template-columns:1fr}
+.search-results{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px}
+.search-results article{display:flex;align-items:center;gap:10px;background:#111219;border:1px solid #252731;border-radius:12px;padding:8px}
+.search-results img{width:46px;height:62px;object-fit:cover;border-radius:7px}
+.search-results div{min-width:0;flex:1}.search-results b,.search-results span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.search-results span{font-size:.72rem;color:#777b87}
+.search-results button{border:0;border-radius:9px;padding:9px;background:#252833;color:#fff;font-weight:700}
+.anime-tile u{position:absolute;left:8px;top:8px;width:27px;height:27px;display:grid;place-items:center;border-radius:50%;background:rgba(8,9,13,.82);text-decoration:none;font-size:1.15rem}
+.result-grid article{position:relative}.lock-btn{margin-left:auto;border:1px solid #30323b;background:#171820;border-radius:8px;padding:7px;color:#fff}.lock-btn.active{border-color:#ef5774;background:#3b1d27}
+.result-actions{display:flex;justify-content:center;gap:8px}.primary.secondary{background:#252833}
+@media(max-width:540px){.search-results{grid-template-columns:1fr}.result-actions{flex-wrap:wrap}}
+
+
+.anime-tile em{position:absolute;left:7px;bottom:39px;background:rgba(8,9,13,.86);padding:5px 7px;border-radius:7px;font-style:normal;font-size:.65rem}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:20;display:grid;place-items:center;padding:16px;backdrop-filter:blur(8px)}
+.modal-card{width:min(900px,100%);max-height:88vh;overflow:auto;background:#101117;border:1px solid #30323b;border-radius:20px;padding:20px}
+.modal-head{display:flex;justify-content:space-between;gap:16px}.modal-head h2{font:800 1.7rem Manrope;margin:5px 0}.modal-head p{color:#8e929e;margin:0}.modal-head>button{border:0;background:#242630;color:#fff;border-radius:50%;width:38px;height:38px;font-size:1.4rem}
+.pool-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:18px}.pool-char{position:relative;border:1px solid #292b34;background:#15161d;color:#fff;border-radius:12px;padding:0;overflow:hidden;text-align:left}.pool-char img{width:100%;aspect-ratio:2/3;object-fit:cover}.pool-char span,.pool-char small{display:block;padding:7px 8px 0}.pool-char small{padding-top:0;padding-bottom:9px;color:#777b87;font-size:.65rem}.pool-char i{position:absolute;right:6px;top:6px;background:#ef5774;padding:4px 6px;border-radius:6px;font-style:normal;font-size:.65rem}.pool-char.disabled{opacity:.35}.pool-char.disabled i{background:#333}
+.fav-btn{border:1px solid #30323b;background:#171820;color:#777;border-radius:8px;padding:7px}.fav-btn.active{color:#ffd56a;border-color:#7a6230;background:#342b18}
+.rank-label{text-align:center;color:#9ca0ab}.rank-buttons{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.rank-buttons button{border:1px solid #343640;background:#171820;color:#fff;border-radius:10px;padding:12px;font-weight:800}.rank-buttons button:disabled{opacity:.2}
+.duel-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.duel-card{padding:0;overflow:hidden;border:1px solid #292b34;background:#111219;color:#fff;border-radius:20px}.duel-card img{width:100%;height:min(68vh,680px);object-fit:contain;object-position:center;background:#0d0e13}.duel-card div{padding:15px}.duel-card small{color:#ef8da0}.duel-card h2{font:800 1.5rem Manrope;margin:3px 0}.duel-card span{font-size:.7rem;letter-spacing:.12em;color:#9ca0ab}
+.winner-card{width:min(390px,100%);margin:20px auto}.winner-card img{width:100%;max-height:520px;object-fit:contain;object-position:center;background:#0d0e13;border-radius:20px}.winner-card h2{font:800 2rem Manrope;margin:10px 0 0}.winner-card p{margin:3px 0 12px}.winner-card button{margin:3px}
+.ranking-list{display:grid;gap:7px}.ranking-list article{display:flex;align-items:center;gap:10px;background:#111219;border:1px solid #252731;border-radius:12px;padding:8px}.ranking-list strong{width:42px;text-align:center;font:800 1.2rem Manrope;color:#ef5774}.ranking-list img{width:48px;height:62px;object-fit:cover;border-radius:7px}.ranking-list div{flex:1;min-width:0}.ranking-list b,.ranking-list span{display:block}.ranking-list span{color:#777b87;font-size:.75rem}
+@media(max-width:700px){.pool-grid{grid-template-columns:repeat(2,1fr)}.duel-grid{gap:7px}.duel-card img{height:56vh}.duel-card h2{font-size:1rem}.duel-card div{padding:9px}.mode-grid{grid-template-columns:1fr 1fr}}
+
+.tournament-note{text-align:center;color:#777b87;font-size:.78rem;margin:10px 0 14px}
+
+.pool-file-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.file-label{display:inline-flex;align-items:center;cursor:pointer}.file-label input{display:none}
+
+.group-table{margin-top:14px}.group-table h3{margin-top:0}.group-table>div{display:grid;grid-template-columns:35px 1fr auto;gap:8px;padding:8px;border-bottom:1px solid #252731}.group-table span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.mini-bracket{display:flex;align-items:center;justify-content:center;gap:6px;overflow-x:auto;padding:10px 2px 14px}.mini-bracket div{display:flex;align-items:center;gap:6px;flex:0 0 auto}.mini-bracket span{border:1px solid #2d3039;background:#14151c;color:#777b87;border-radius:999px;padding:7px 10px;font-size:.68rem;font-weight:800;letter-spacing:.05em}.mini-bracket .current span{border-color:#ef5774;background:#351a24;color:#fff;box-shadow:0 0 20px rgba(239,87,116,.22)}.mini-bracket i{color:#444;font-style:normal}
+.animate-in{animation:cardIn .28s ease both}@keyframes cardIn{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:none}}
+.tiebreak-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:16px}.tiebreak-card{border:1px solid #2b2d36;background:#12131a;color:#fff;border-radius:16px;overflow:hidden;padding:0;text-align:left;transition:.2s}.tiebreak-card img{width:100%;aspect-ratio:2/3;object-fit:contain;background:#0d0e13}.tiebreak-card div{padding:10px}.tiebreak-card h3{margin:4px 0}.tiebreak-card span{color:#ef8da0;font-size:.72rem}.tiebreak-card.selected{border-color:#ef5774;transform:translateY(-3px);box-shadow:0 10px 28px rgba(239,87,116,.18)}
+.full{width:100%}.group-table .qualifying{background:rgba(78,200,140,.08);border-left:3px solid #4ec88c}.wc-stage .duel-card{transition:transform .18s ease,border-color .18s ease}.wc-stage .duel-card:active{transform:scale(.985);border-color:#ef5774}
+.podium{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;align-items:end;margin:18px auto;max-width:900px}.podium article{background:#12131a;border:1px solid #2b2d36;border-radius:18px;padding:12px;text-align:center}.podium img{width:100%;aspect-ratio:2/3;object-fit:contain;background:#0d0e13;border-radius:12px}.podium span{display:inline-block;background:#ef5774;color:#fff;border-radius:999px;padding:5px 9px;font-weight:800}.podium-1{order:2;transform:translateY(-14px)}.podium-2{order:1}.podium-3{order:3}
+@media(max-width:700px){.podium{grid-template-columns:1fr 1fr}.podium-1{grid-column:1/-1;order:1;transform:none}.podium-2{order:2}.podium-3{order:3}}
+
+.bracket-status{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:8px 0 14px}.bracket-status span{background:#171821;border:1px solid #2b2d36;border-radius:999px;padding:7px 10px;color:#a7aab4;font-size:.72rem}
+
+.world-actions{display:flex;justify-content:center;gap:7px;flex-wrap:wrap;margin:0 0 12px}.world-actions button{background:#171821;color:#c7cad3;border:1px solid #30323c;border-radius:999px;padding:8px 11px}.world-actions button:disabled{opacity:.35}
+.overlay{position:fixed;inset:0;background:rgba(5,6,10,.82);backdrop-filter:blur(8px);z-index:100;display:grid;place-items:center;padding:12px}.overlay-card{width:min(620px,100%);max-height:92vh;overflow:auto;background:#111219;border:1px solid #30323c;border-radius:22px;padding:16px}.overlay-card.large{width:min(1200px,100%)}.overlay-head{display:flex;justify-content:space-between;align-items:center;position:sticky;top:-16px;background:#111219;padding:10px 0;z-index:2}.overlay-head h2{margin:0}.overlay-head button{font-size:1.4rem;background:#22242d;color:#fff;border:0;border-radius:50%;width:38px;height:38px}
+.groups-overview{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}.groups-overview section{background:#171821;border:1px solid #292b34;border-radius:14px;padding:10px}.groups-overview h3{margin:0 0 7px}.groups-overview section div,.stat-anime div{display:grid;grid-template-columns:30px 1fr auto;gap:7px;padding:6px;border-bottom:1px solid #252731;font-size:.78rem}.groups-overview .qualified{border-left:3px solid #4ec88c;background:rgba(78,200,140,.08)}
+.full-bracket{display:flex;gap:12px;overflow-x:auto;align-items:flex-start;padding-bottom:8px}.full-bracket section{min-width:210px}.full-bracket h3{position:sticky;top:55px;background:#111219;padding:8px 0;z-index:1}.bracket-match{border:1px solid #292b34;background:#171821;border-radius:12px;padding:8px;margin:7px 0;display:grid;gap:4px}.bracket-match span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.bracket-match i{color:#666;font-size:.65rem}.bracket-match.done b{color:#4ec88c}.bracket-match.active{border-color:#ef5774;box-shadow:0 0 22px rgba(239,87,116,.2);animation:pulseMatch 1.8s infinite}@keyframes pulseMatch{50%{transform:scale(1.02)}}
+.resume-btn{border-color:#4ec88c!important;color:#8be4b6!important}
+.stat-anime{display:grid;gap:3px}
+
+.stats-highlight-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px auto;max-width:1100px}.stat-highlight{background:#12131a;border:1px solid #2c2e37;border-radius:20px;padding:14px;text-align:center}.stat-highlight img{width:100%;aspect-ratio:2/3;object-fit:contain;background:#0d0e13;border-radius:14px}.stat-highlight h2{margin:9px 0 3px}.stat-highlight p{margin:0 0 8px;color:#9da0aa}.stat-highlight span,.stat-highlight b{display:block;margin-top:6px}.stat-highlight.favorite{border-color:#4ec88c;box-shadow:0 0 24px rgba(78,200,140,.12)}.stat-highlight.hated{border-color:#ef5774;box-shadow:0 0 24px rgba(239,87,116,.12)}
+.versus-mini{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center}.versus-mini img{aspect-ratio:1/1}.versus-mini strong{color:#ef5774}
+.stats-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}.stats-cards>div{background:#171821;border:1px solid #292b34;border-radius:14px;padding:12px}.stats-cards small,.stats-cards span{display:block;color:#8f929d}.stats-cards b{display:block;font-size:1.05rem;margin:5px 0}
+@media(max-width:800px){.stats-highlight-grid{grid-template-columns:1fr}.stat-highlight{display:grid;grid-template-columns:92px 1fr;gap:5px 12px;text-align:left}.stat-highlight img,.versus-mini{grid-row:1/6}.versus-mini{grid-column:1;width:92px}.stat-highlight small,.stat-highlight h2,.stat-highlight p,.stat-highlight b,.stat-highlight span{grid-column:2}.versus-mini img{width:38px}}
+
+.auto-controls{margin:10px 0 14px;padding:10px 12px;border:1px solid #2b2d36;background:#14151c;border-radius:14px}.auto-controls.active{border-color:#ef5774;box-shadow:0 0 20px rgba(239,87,116,.1)}.auto-toggle{display:flex;align-items:center;gap:9px;font-weight:700}.auto-toggle input{width:18px;height:18px;accent-color:#ef5774}.auto-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px}.auto-row button{background:#22242d;color:#fff;border:1px solid #343741;border-radius:999px;padding:8px 12px}.auto-row label{display:flex;align-items:center;gap:8px;flex:1;min-width:220px}.auto-row input[type=range]{flex:1;accent-color:#ef5774}.auto-controls small{display:block;color:#8d9099;margin-top:8px}.video-badge{text-align:center;margin:8px auto 12px;padding:8px 12px;width:max-content;max-width:100%;background:rgba(239,87,116,.12);border:1px solid rgba(239,87,116,.35);border-radius:999px;color:#ff9bae;font-size:.72rem;font-weight:800;letter-spacing:.06em;animation:autoPulse 1.6s infinite}@keyframes autoPulse{50%{opacity:.62}}@media(max-width:650px){.auto-row{align-items:stretch}.auto-row label{min-width:100%;display:grid;grid-template-columns:auto auto 1fr}}
+
+.game-view{position:relative;min-height:100vh;padding-top:66px}.game-top-buttons{position:fixed;top:max(12px,env(safe-area-inset-top));right:12px;z-index:90}.game-top-left{position:fixed;top:max(12px,env(safe-area-inset-top));left:12px;z-index:90}.gear-button{width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.25);background:rgba(15,16,22,.94);backdrop-filter:blur(12px);color:#fff;font-size:1.2rem;box-shadow:0 8px 28px rgba(0,0,0,.45);display:grid;place-items:center}.back-button{font-size:1.35rem}
+.game-menu-overlay{position:fixed;inset:0;z-index:120;background:rgba(4,5,9,.82);backdrop-filter:blur(10px);display:grid;place-items:center;padding:14px}.game-menu{width:min(440px,100%);background:#12131a;border:1px solid #30323c;border-radius:24px;padding:18px;box-shadow:0 24px 80px rgba(0,0,0,.5)}.menu-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}.menu-head h2{margin:3px 0}.menu-kicker{font-size:.65rem;letter-spacing:.14em;color:#ef7890;font-weight:800}.menu-close{width:38px;height:38px;border-radius:50%;border:0;background:#242630;color:#fff;font-size:1.35rem}.menu-switch{display:flex;justify-content:space-between;gap:14px;align-items:center;padding:13px 0;border-bottom:1px solid #292b34}.menu-switch span,.menu-switch small{display:block}.menu-switch small,.menu-note{color:#8f929d}.menu-switch input{width:22px;height:22px;accent-color:#ef5774}.menu-setting{padding:14px 0;border-bottom:1px solid #292b34}.menu-setting>div{display:flex;justify-content:space-between;margin-bottom:10px}.menu-setting input{width:100%;accent-color:#ef5774}.menu-wide{width:100%;padding:12px;margin-top:12px;border:1px solid #343741;border-radius:13px;background:#22242d;color:#fff;font-weight:800}.danger-outline{border-color:#7e3341;color:#ff8da3;background:rgba(239,87,116,.08)}.confirm-box{text-align:center}.confirm-box p{color:#a4a7b0}.menu-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:18px}.menu-actions button{padding:12px;border-radius:12px;border:1px solid #343741;background:#22242d;color:#fff}.menu-actions .danger{background:#d84661;border-color:#d84661}
+.countdown-wrap{position:fixed;top:max(12px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);z-index:55;display:grid;justify-items:center;gap:3px}.countdown-wrap small{font-size:.58rem;font-weight:900;letter-spacing:.1em;color:#cdd0d8;text-shadow:0 2px 6px #000}.countdown-ring{--countdown-progress:360deg;width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(#ef5774 var(--countdown-progress),rgba(255,255,255,.13) 0);position:relative;box-shadow:0 7px 25px rgba(0,0,0,.4)}.countdown-ring:before{content:"";position:absolute;inset:5px;border-radius:50%;background:#111219}.countdown-ring span{position:relative;font-size:1.25rem;font-weight:900}
+.scene-transition{animation:sceneIn .55s cubic-bezier(.2,.8,.2,1)}@keyframes sceneIn{from{opacity:0;transform:scale(.975) translateY(12px);filter:blur(5px)}to{opacity:1;transform:none;filter:none}}
+.cinematic{padding-top:8px}.cinematic .game-info{opacity:.18;transition:opacity .25s}.cinematic .game-info:hover{opacity:1}.cinematic .duel-card img{height:min(78vh,900px)}.cinematic .kmm-card img{height:min(69vh,760px);object-fit:contain;background:#090a0e}.cinematic .kmm-grid{align-items:stretch}.cinematic .kmm-meta{padding:10px}.duel-card:disabled{cursor:default;opacity:1}
+@media(max-width:700px){.countdown-ring{width:50px;height:50px}.countdown-ring span{font-size:1.05rem}.gear-button{width:40px;height:40px}.cinematic .duel-card img{height:72vh}.cinematic .kmm-card img{height:57vh}.cinematic .kmm-grid{gap:5px}.cinematic .kmm-card h2{font-size:.9rem}}
+
+.app-mode-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.mode-card{position:relative;min-height:190px;padding:0;overflow:hidden;border:1px solid #2b2d38;border-radius:20px;background:#101119;color:#fff;text-align:left;box-shadow:0 12px 35px rgba(0,0,0,.24);isolation:isolate;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
+.mode-card:active{transform:scale(.975)}
+.mode-card::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 28%,rgba(7,8,13,.3) 52%,rgba(7,8,13,.98) 100%);z-index:-1}
+.mode-card.active{border-color:#ff6480;box-shadow:0 0 0 2px rgba(255,100,128,.15),0 18px 44px rgba(239,87,116,.22);transform:translateY(-2px)}
+.mode-art{position:absolute;inset:0 0 58px;background-size:cover;background-position:center;z-index:-2;transition:transform .35s ease}
+.mode-card:active .mode-art,.mode-card.active .mode-art{transform:scale(1.035)}
+.mode-copy{position:absolute;left:14px;right:50px;bottom:13px;display:block}
+.mode-copy b{display:block;font-size:1rem;line-height:1.15;letter-spacing:.01em}
+.mode-copy small{display:block;color:#aeb1bc;font-size:.69rem;line-height:1.25;margin-top:4px}
+.mode-card>i{position:absolute;right:13px;bottom:18px;width:32px;height:32px;display:grid;place-items:center;border-radius:10px;background:rgba(255,255,255,.08);backdrop-filter:blur(8px);font-style:normal}
+.mode-card.active>i{background:#ef5774}
+.mode-card.active::before{content:"AUSGEWÄHLT";position:absolute;top:10px;right:10px;z-index:3;padding:5px 8px;border-radius:999px;background:rgba(8,9,14,.78);border:1px solid rgba(255,255,255,.18);font-size:.56rem;font-weight:900;letter-spacing:.08em}
+@media(max-width:700px){
+ .app-mode-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ .mode-card{min-height:168px;border-radius:17px}
+ .mode-art{inset:0 0 64px}
+ .mode-copy{left:11px;right:39px;bottom:10px}
+ .mode-copy b{font-size:.88rem}
+ .mode-copy small{font-size:.61rem}
+ .mode-card>i{right:9px;bottom:12px;width:27px;height:27px;font-size:.8rem}
+}
+@media(max-width:390px){
+ .app-mode-grid{grid-template-columns:1fr}
+ .mode-card{min-height:178px}
+}
+
+
+:root{
+ --bg:#080910;--panel:#101119;--panel2:#151722;--text:#f7f7fb;--muted:#9da1ad;
+ --accent:#ef5774;--line:#292c38;
+}
+body{background:
+ radial-gradient(circle at 80% -10%,rgba(239,87,116,.14),transparent 34%),
+ radial-gradient(circle at 8% 12%,rgba(73,93,255,.1),transparent 28%),
+ #080910}
+.page{max-width:1420px;margin:auto;padding:18px 22px 70px}
+.app-hero{position:relative;overflow:hidden;border:1px solid #252937;border-radius:28px;padding:34px;background:
+ linear-gradient(90deg,rgba(8,9,16,.98) 0%,rgba(8,9,16,.9) 48%,rgba(8,9,16,.28) 100%),
+ radial-gradient(circle at 85% 35%,rgba(239,87,116,.28),transparent 35%),
+ #11131c;box-shadow:0 24px 60px rgba(0,0,0,.35)}
+.app-hero::after{content:"";position:absolute;inset:0;background:
+ linear-gradient(115deg,transparent 56%,rgba(255,255,255,.03) 56.5%,transparent 57%);pointer-events:none}
+.brand-lockup{position:relative;z-index:1}
+.brand-kicker{display:block;color:#ff6b84;font-weight:900;letter-spacing:.24em;font-size:.7rem}
+.brand-lockup h1{margin:6px 0 0;font-size:clamp(2.6rem,7vw,5.6rem);line-height:.86;letter-spacing:-.05em}
+.brand-lockup h1 em{color:#ef5774;font-style:normal}
+.brand-lockup small{display:block;color:#cfd2dc;letter-spacing:.28em;margin-top:10px}
+.app-hero p{position:relative;z-index:1;max-width:630px;color:#b3b6c1;font-size:1rem}
+.hero-actions{position:relative;z-index:1;display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}
+.hero-chip{border:1px solid #333744;background:rgba(18,20,30,.78);color:#fff;border-radius:999px;padding:10px 14px;backdrop-filter:blur(8px)}
+.modes-heading{display:flex;align-items:end;justify-content:space-between;margin:30px 0 14px}
+.modes-heading small{color:#ef5774;font-weight:900;letter-spacing:.16em}
+.modes-heading h2{margin:4px 0 0;font-size:clamp(1.5rem,3vw,2.4rem)}
+.modes-heading>span{color:#8e929f;border:1px solid #292c38;border-radius:999px;padding:7px 10px}
+.app-mode-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.mode-card{position:relative;min-height:310px;padding:0;overflow:hidden;border:1px solid #2b2f3b;border-radius:24px;background:#101119;color:#fff;text-align:left;box-shadow:0 20px 48px rgba(0,0,0,.28);isolation:isolate;transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease}
+.mode-card:hover{transform:translateY(-6px);border-color:#464b5c;box-shadow:0 28px 65px rgba(0,0,0,.4)}
+.mode-card:active{transform:scale(.982)}
+.mode-card::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(6,7,12,.18) 48%,rgba(6,7,12,.98) 100%);z-index:-1}
+.mode-card.active{border-color:#ff6682;box-shadow:0 0 0 2px rgba(255,102,130,.14),0 26px 62px rgba(239,87,116,.22)}
+.mode-art{position:absolute;inset:0;background-size:cover;background-position:center;z-index:-2;transform:scale(1.01);transition:transform .5s ease,filter .4s ease}
+.mode-card:hover .mode-art,.mode-card.active .mode-art{transform:scale(1.07);filter:saturate(1.08) contrast(1.03)}
+.mode-copy{position:absolute;left:18px;right:62px;bottom:18px;display:block}
+.mode-copy b{display:block;font-size:1.3rem;line-height:1.05}
+.mode-copy small{display:block;color:#b7bac4;font-size:.76rem;line-height:1.35;margin-top:7px}
+.mode-card>i{position:absolute;right:16px;bottom:17px;width:38px;height:38px;display:grid;place-items:center;border-radius:12px;background:rgba(255,255,255,.1);backdrop-filter:blur(10px);font-style:normal}
+.mode-card.active>i{background:#ef5774}
+.mode-card.active::before{content:"AUSGEWÄHLT";position:absolute;top:13px;right:13px;z-index:3;padding:6px 9px;border-radius:999px;background:rgba(7,8,13,.78);border:1px solid rgba(255,255,255,.18);font-size:.56rem;font-weight:900;letter-spacing:.1em}
+@media(max-width:1050px){.app-mode-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.mode-card{min-height:280px}}
+@media(max-width:650px){
+ .page{padding:10px 12px 64px}.app-hero{padding:24px 18px;border-radius:22px}
+ .app-mode-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .mode-card{min-height:205px;border-radius:18px}
+ .mode-copy{left:12px;right:44px;bottom:12px}.mode-copy b{font-size:.98rem}.mode-copy small{font-size:.64rem}
+ .mode-card>i{right:10px;bottom:11px;width:30px;height:30px;font-size:.8rem}
+}
+@media(max-width:390px){.app-mode-grid{grid-template-columns:1fr}.mode-card{min-height:230px}}
+
+
+/* Anime Gamez V6.1 — responsive app chrome */
+body{padding-top:74px}
+#appNav{position:fixed;inset:0 0 auto;z-index:180;pointer-events:none}
+.app-topbar{height:74px;padding:10px max(16px,env(safe-area-inset-left));display:flex;align-items:center;justify-content:space-between;background:linear-gradient(180deg,rgba(8,9,13,.98),rgba(8,9,13,.86));border-bottom:1px solid rgba(255,255,255,.07);backdrop-filter:blur(18px);pointer-events:auto}
+.app-topbar.hidden{display:none}
+.top-brand{display:flex;align-items:center;gap:11px;border:0;background:transparent;color:#fff;padding:0;text-align:left}
+.top-brand img{width:48px;height:48px;object-fit:cover;object-position:center;border-radius:13px;border:1px solid rgba(255,255,255,.11);box-shadow:0 7px 25px rgba(88,63,224,.22)}
+.top-brand span{display:flex;flex-direction:column;line-height:1}.top-brand b{font:800 1rem Manrope;letter-spacing:.02em}.top-brand small{font-size:.58rem;color:#9ca1b1;letter-spacing:.13em;margin-top:5px}
+.hamburger{width:48px;height:48px;border:1px solid #2c2f3a;border-radius:14px;background:#151720;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:0}
+.hamburger i{display:block;width:20px;height:2px;border-radius:4px;background:#f5f4f2;transition:.22s}
+.hamburger.open i:nth-child(1){transform:translateY(7px) rotate(45deg)}.hamburger.open i:nth-child(2){opacity:0}.hamburger.open i:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.main-drawer-backdrop{position:fixed;inset:0;background:rgba(2,3,7,.72);backdrop-filter:blur(8px);pointer-events:auto;animation:fadeIn .18s ease}
+.main-drawer{position:absolute;right:0;top:0;width:min(390px,88vw);height:100%;padding:calc(92px + env(safe-area-inset-top)) 18px 28px;background:#0e1017;border-left:1px solid #292c38;box-shadow:-30px 0 80px rgba(0,0,0,.45);overflow:auto;animation:drawerIn .24s ease}
+@keyframes drawerIn{from{transform:translateX(100%)}to{transform:none}}@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.drawer-title{display:block;color:#ef7890;font-size:.65rem;font-weight:900;letter-spacing:.17em;margin:0 10px 14px}
+.drawer-nav{display:grid;gap:8px}.drawer-nav button{width:100%;border:1px solid transparent;border-radius:15px;background:transparent;color:#e9e9ed;padding:14px;display:grid;grid-template-columns:34px 1fr auto;align-items:center;text-align:left}.drawer-nav button:hover,.drawer-nav button.active{background:#191b24;border-color:#2b2e3a}.drawer-nav strong{font-size:.91rem}.drawer-nav small{display:block;color:#8f94a3;margin-top:3px}.drawer-nav em{font-style:normal;color:#686e7e}.drawer-divider{height:1px;background:#252833;margin:16px 8px}.drawer-note{padding:13px;border-radius:14px;background:#141620;color:#8e93a2;font-size:.72rem;line-height:1.5}
+.app-logo-hero{display:grid;grid-template-columns:minmax(220px,390px) 1fr;gap:clamp(26px,6vw,78px);align-items:center;padding:38px 0 42px}.app-logo-hero img{width:100%;max-width:360px;aspect-ratio:1/1;object-fit:cover;border-radius:30px;border:1px solid rgba(255,255,255,.11);box-shadow:0 35px 100px rgba(84,54,224,.24)}
+.app-logo-copy .eyebrow{display:block;margin-bottom:14px}.app-logo-copy h1{margin:0;font:800 clamp(2.9rem,7vw,6.5rem)/.88 Manrope;letter-spacing:-.065em}.app-logo-copy h1 em{font-style:normal;color:#7e66ff}.app-logo-copy>small{display:block;margin-top:15px;color:#a79bff;letter-spacing:.24em}.app-logo-copy p{max-width:620px;margin:22px 0 0;color:#9ca1af;font-size:clamp(.95rem,2vw,1.12rem);line-height:1.65}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.info-grid article{border:1px solid #292c37;border-radius:18px;padding:20px;background:#11131a}.info-grid h3{margin:0 0 8px}.info-grid p{margin:0;color:#9ba0ad;line-height:1.65}.legal-copy{color:#a5a9b5;line-height:1.75}.legal-copy strong{color:#fff}
+@media(max-width:760px){body{padding-top:66px}.app-topbar{height:66px}.top-brand img{width:42px;height:42px}.hamburger{width:43px;height:43px}.app-logo-hero{grid-template-columns:1fr;text-align:center;padding:24px 0 26px}.app-logo-hero img{width:min(68vw,280px);margin:auto;border-radius:24px}.app-logo-copy p{margin-left:auto;margin-right:auto}.info-grid{grid-template-columns:1fr}.page{width:min(100% - 22px,1180px);padding-top:24px}.hero{padding-top:26px}}
+
+
+.random-mix-card{margin-top:16px;padding:16px;border:1px solid #303544;border-radius:18px;background:linear-gradient(135deg,rgba(130,82,255,.12),rgba(239,87,116,.08));box-shadow:0 14px 32px rgba(0,0,0,.16)}
+.random-mix-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:12px}
+.random-mix-head b{display:block;font-size:1rem}.random-mix-head small{display:block;color:#aeb3c1;margin-top:4px;line-height:1.35}
+.random-mix-badge{flex:0 0 auto;padding:6px 9px;border-radius:999px;background:#ef5774;color:#fff;font-size:.66rem;font-weight:900;letter-spacing:.08em}
+.random-mix-actions{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.random-count{display:flex;gap:6px;padding:4px;border-radius:13px;background:#0c0e15;border:1px solid #292d39}
+.random-count button{min-width:42px;padding:8px 10px;border:0;border-radius:9px;background:transparent;color:#aeb3c1;font-weight:850}
+.random-count button.active{background:#2a2e3b;color:#fff}
+.random-load{flex:1;min-width:190px;padding:12px 15px;border:0;border-radius:13px;background:linear-gradient(135deg,#845cff,#ef5774);color:white;font-weight:950;letter-spacing:.02em;box-shadow:0 10px 25px rgba(132,92,255,.22)}
+.random-load:disabled{opacity:.55;box-shadow:none}
+@media(max-width:520px){.random-mix-head{display:block}.random-mix-badge{display:inline-block;margin-top:9px}.random-load{width:100%}}
+.setup-page{display:flex;flex-direction:column}.setup-page>.app-logo-hero{order:0}.setup-page>.game-panel{order:1}.setup-page>.manual-panel{order:2}.setup-page>.selection-panel{order:3}.setup-page>.modal{order:4}
+.random-loading{min-height:calc(100vh - 80px);display:grid;place-items:center;padding:28px}.random-loading-card{width:min(520px,100%);padding:34px 24px;text-align:center;border:1px solid #303544;border-radius:26px;background:linear-gradient(145deg,rgba(24,27,38,.97),rgba(13,15,23,.98));box-shadow:0 28px 80px rgba(0,0,0,.45)}.random-loading-logo{width:min(250px,70vw);max-height:130px;object-fit:contain;margin-bottom:18px}.random-spinner{width:58px;height:58px;margin:18px auto;border-radius:50%;border:5px solid rgba(255,255,255,.1);border-top-color:#845cff;border-right-color:#ef5774;animation:randomSpin .9s linear infinite}.random-loading-card h1{margin:5px 0 10px;font-size:clamp(1.55rem,5vw,2.35rem)}.random-loading-card p{margin:0;color:#b8bdca;line-height:1.55}.random-loading-card small{display:block;margin-top:18px;color:#7f8594;letter-spacing:.08em;text-transform:uppercase}@keyframes randomSpin{to{transform:rotate(360deg)}}
+
+/* ===== Anime Gamez V6.4 UI Polish ===== */
+.character-card{min-height:min(56vh,620px);max-height:620px;border-radius:22px;overflow:hidden;background:#090a0e}
+.character-card img{width:106%;height:min(56vh,620px);min-height:0;max-height:620px;object-fit:cover;object-position:center top;transform:translate(-3%,-1%) scale(1.04);background:#090a0e}
+.character-card .shade{inset:38% 0 0;background:linear-gradient(to bottom,transparent 0%,rgba(5,5,8,.26) 24%,rgba(5,5,8,.88) 70%,#050508 100%)}
+.character-meta{left:20px;right:20px;bottom:18px;z-index:2;text-shadow:0 2px 14px rgba(0,0,0,.9)}
+.character-meta h1{font-size:clamp(1.65rem,6vw,2.8rem)}
+.actions{margin-top:10px}.actions button{padding:13px}
+.duel-grid{align-items:start}
+.duel-card{position:relative;min-height:0;border-radius:18px;overflow:hidden;background:#090a0e}
+.duel-card img{width:106%;height:min(55vh,590px);object-fit:cover;object-position:center top;transform:translate(-3%,-1%) scale(1.04);display:block}
+.duel-card div{position:relative;margin-top:-118px;padding:62px 14px 14px;background:linear-gradient(to bottom,transparent,rgba(5,5,8,.88) 48%,#090a0e 100%);text-shadow:0 2px 12px rgba(0,0,0,.9)}
+.duel-card h2{margin:2px 0;font-size:clamp(1rem,3vw,1.35rem)}
+.kmm-card{border-radius:18px;background:#090a0e}
+.kmm-card>img{width:106%;aspect-ratio:2/3;object-fit:cover;object-position:center top;transform:translate(-3%,-1%) scale(1.04)}
+.kmm-meta{position:relative;margin-top:-92px;padding:48px 12px 8px;background:linear-gradient(to bottom,transparent,rgba(5,5,8,.9) 48%,#090a0e 100%);text-shadow:0 2px 12px rgba(0,0,0,.9)}
+.kmm-actions{position:relative;background:#090a0e}
+.cinematic .duel-card img{height:min(60vh,650px)}
+.cinematic .kmm-card img{height:auto;object-fit:cover}
+@media(max-width:700px){
+ .character-card{min-height:52vh;max-height:560px}.character-card img{height:52vh;max-height:560px}
+ .duel-card img,.cinematic .duel-card img{height:48vh}.duel-card div{margin-top:-102px;padding-top:52px}
+ .kmm-meta{margin-top:-72px;padding-top:38px}
+}
+#globalLoader{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;padding:22px;background:radial-gradient(circle at 50% 35%,rgba(132,92,255,.17),transparent 38%),rgba(5,6,10,.96);backdrop-filter:blur(14px);opacity:0;pointer-events:none;transition:opacity .2s ease}
+#globalLoader.show{opacity:1;pointer-events:auto}
+.global-loader-card{width:min(430px,100%);text-align:center;padding:30px 22px;border:1px solid #303544;border-radius:26px;background:linear-gradient(145deg,rgba(24,27,38,.96),rgba(12,14,21,.98));box-shadow:0 28px 90px rgba(0,0,0,.55)}
+.global-loader-logo{width:min(220px,68vw);max-height:108px;object-fit:contain;margin-bottom:14px}.global-loader-spinner{width:54px;height:54px;margin:14px auto 18px;border-radius:50%;border:5px solid rgba(255,255,255,.09);border-top-color:#845cff;border-right-color:#ef5774;animation:randomSpin .85s linear infinite}.global-loader-card h2{margin:0 0 8px}.global-loader-card p{margin:0;color:#aeb3c1;line-height:1.45}.global-loader-bar{height:4px;margin-top:20px;border-radius:99px;overflow:hidden;background:#252834}.global-loader-bar i{display:block;width:42%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#845cff,#ef5774);animation:loaderMove 1.15s ease-in-out infinite}@keyframes loaderMove{0%{transform:translateX(-120%)}100%{transform:translateX(340%)}}
+
+
+/* V6.4 World Cup: compact, horizontal live tournament tree */
+.wc-tree-panel{margin:18px 0 0;border:1px solid #292d39;background:linear-gradient(180deg,rgba(17,19,28,.98),rgba(8,9,15,.98));border-radius:18px;overflow:hidden;box-shadow:0 18px 46px rgba(0,0,0,.28)}
+.wc-tree-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 14px;border-bottom:1px solid #272b36}.wc-tree-head div{min-width:0}.wc-tree-head small{display:block;color:#ef5774;font-weight:900;letter-spacing:.14em;font-size:.6rem}.wc-tree-head b{display:block;margin-top:2px;font-size:.88rem}.wc-tree-head span{color:#8d919d;font-size:.68rem;white-space:nowrap}
+.wc-tree-scroll{overflow-x:auto;overflow-y:hidden;padding:8px 10px 12px;scrollbar-width:thin;scrollbar-color:#353948 transparent}.wc-tree-canvas{position:relative;width:1180px;height:310px;margin:auto;isolation:isolate}.wc-tree-lines{position:absolute;inset:0;width:100%;height:100%;z-index:0;overflow:visible}.wc-tree-lines path{fill:none;stroke:#3a3f4b;stroke-width:2;vector-effect:non-scaling-stroke}.wc-tree-lines path.done{stroke:#c99b43;filter:drop-shadow(0 0 4px rgba(229,178,76,.32))}.wc-tree-lines path.current{stroke:#ef5774;filter:drop-shadow(0 0 5px rgba(239,87,116,.55))}
+.wc-node{position:absolute;z-index:2;width:116px;height:32px;transform:translate(-50%,-50%);border:1px solid #363b48;border-radius:8px;background:linear-gradient(180deg,#1a1d26,#11131a);display:grid;grid-template-rows:1fr 1fr;overflow:hidden;box-shadow:0 5px 14px rgba(0,0,0,.2)}.wc-node.current{border-color:#ef5774;box-shadow:0 0 0 1px rgba(239,87,116,.18),0 0 16px rgba(239,87,116,.28)}.wc-node.done{border-color:#7f6736}.wc-node.final-node{width:104px;border-color:#a47b31}.wc-node .wc-person{min-width:0;display:flex;align-items:center;gap:4px;padding:1px 5px;color:#c9ccd5;font-size:7.5px;line-height:1;border-bottom:1px solid rgba(255,255,255,.05)}.wc-node .wc-person:last-child{border-bottom:0}.wc-node .wc-person.winner{color:#f2c461}.wc-node img{width:12px;height:12px;flex:0 0 12px;border-radius:50%;object-fit:cover;background:#252936}.wc-node em{font-style:normal;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.wc-node .empty{color:#555b68}.wc-current-dot{position:absolute;z-index:5;width:12px;height:12px;border-radius:50%;background:#ff5368;border:2px solid #ffd0d5;box-shadow:0 0 0 5px rgba(239,87,116,.13),0 0 16px rgba(239,87,116,.8);transform:translate(-50%,-50%);animation:wcDotPulse 1.55s ease-in-out infinite}.wc-current-dot::after{content:"";position:absolute;inset:3px;border-radius:50%;background:#fff}@keyframes wcDotPulse{50%{box-shadow:0 0 0 9px rgba(239,87,116,0),0 0 22px rgba(239,87,116,.9)}}
+.wc-champion{position:absolute;z-index:3;left:50%;top:50%;width:92px;height:64px;transform:translate(-50%,-50%);border:1px solid #a67b2d;border-radius:12px;background:radial-gradient(circle at 50% 15%,rgba(242,190,79,.18),transparent 52%),#11131a;text-align:center;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 0 22px rgba(215,161,58,.12)}.wc-champion strong{font-size:17px;color:#efbd55}.wc-champion img{width:22px;height:22px;border-radius:50%;object-fit:cover;margin-bottom:2px}.wc-champion span{max-width:78px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:7.5px;color:#f4d58e;font-weight:800}.wc-tree-label{position:absolute;top:1px;transform:translateX(-50%);color:#747985;font-size:7px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;z-index:1}.wc-tree-empty{position:absolute;left:50%;bottom:5px;transform:translateX(-50%);z-index:4;color:#777c89;font-size:8px;white-space:nowrap}
+@media(max-width:700px){.wc-tree-panel{border-radius:14px;margin-top:13px}.wc-tree-head{padding:9px 11px}.wc-tree-head span{display:none}.wc-tree-scroll{padding:6px 7px 9px}.wc-tree-canvas{width:1000px;height:270px}.wc-node{width:98px;height:28px}.wc-node .wc-person{font-size:6.8px}.wc-node img{width:10px;height:10px;flex-basis:10px}.wc-champion{width:78px;height:58px}}
+
+/* ===== Anime Gamez V6.5: mobile-first setup, offline library and team battles ===== */
+body{background:linear-gradient(rgba(6,7,11,.78),rgba(6,7,11,.92)),url("assets/app-background-v1.png") center top/cover fixed no-repeat,#08090d}
+button,select,input{touch-action:manipulation}.v65-page,.v65-setup{padding-top:34px}.v65-title{text-align:center;padding:34px 0 18px}.v65-title h1{font:800 clamp(2.25rem,7vw,4.8rem) Manrope;margin:8px 0;letter-spacing:-.055em}.v65-title h1 em{color:#ef5774;font-style:normal}.v65-title p{max-width:680px;margin:0 auto 12px;color:#a5a9b5;line-height:1.55}
+.topbar-actions{display:flex;align-items:center;gap:8px}.language-picker{margin:0;display:flex;align-items:center;gap:5px;height:42px;padding:0 8px;border:1px solid #303442;border-radius:12px;background:#151720;color:#fff}.language-picker select{border:0;outline:0;background:transparent;color:#fff;font-weight:900}.language-picker option{background:#151720}.language-picker span{font-size:.82rem}
+.home-banner{position:relative;min-height:330px;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;margin:10px 0 22px;border:1px solid #343041;border-radius:28px;background-image:linear-gradient(90deg,rgba(6,6,11,.22),rgba(6,6,11,.84) 37%,rgba(6,6,11,.84) 63%,rgba(6,6,11,.22)),var(--banner);background-position:center;background-size:cover;box-shadow:0 26px 80px rgba(0,0,0,.42)}.home-banner::after{content:"";position:absolute;inset:auto 0 0;height:42%;background:linear-gradient(transparent,#0b0c12)}.home-banner>div{position:relative;z-index:1;width:min(540px,88%);padding:36px 18px}.home-banner h1{font:900 clamp(2.8rem,8vw,5.8rem) Manrope;margin:8px 0;line-height:.9;letter-spacing:-.07em;text-shadow:0 8px 30px #000}.home-banner h1 em{color:#ef5774;font-style:normal}.home-banner p{color:#d2d4dd;line-height:1.5;margin:15px 0 0;text-shadow:0 2px 14px #000}
+.pool-first,.modes-step,.mode-options-panel{scroll-margin-top:82px}.pool-tools{display:grid;grid-template-columns:1fr 1fr;gap:12px}.pool-tools>article,.offline-tool{border:1px solid #2c303c;background:linear-gradient(145deg,rgba(22,24,33,.94),rgba(12,14,21,.96));border-radius:17px;padding:14px}.random-tool>div:first-child,.offline-tool>div:first-child{display:flex;align-items:center;gap:10px;margin-bottom:13px}.random-tool>div:first-child>span,.offline-icon{width:42px;height:42px;display:grid;place-items:center;border-radius:12px;background:linear-gradient(135deg,#845cff,#ef5774);font-size:1.25rem;font-style:normal}.random-tool b,.offline-tool b{display:block}.random-tool small,.offline-tool small{display:block;color:#9499a7;margin-top:3px;line-height:1.35}.manual-tool .pool-file-actions{margin-top:11px}.offline-tool{margin-top:12px;display:flex;justify-content:space-between;align-items:center;gap:14px}.offline-tool>div:first-child{margin:0}.offline-actions{display:flex;align-items:center;justify-content:flex-end;gap:7px;flex-wrap:wrap}.offline-switch{margin:0;display:flex;align-items:center;gap:7px;padding:8px 10px;border:1px solid #343846;border-radius:11px;text-transform:none;letter-spacing:0;color:#d5d7df}.offline-switch input{width:auto;accent-color:#ef5774}
+.quality-strip{display:flex;align-items:center;gap:9px;margin-top:12px;padding:10px 12px;border:1px solid #2c303b;border-radius:13px;background:rgba(11,13,19,.8)}.quality-strip b,.quality-strip small{display:block}.quality-strip small{margin-top:2px;color:#8e93a0}.quality-dot{width:10px;height:10px;flex:0 0 10px;border-radius:50%;background:#7a7f8c;box-shadow:0 0 0 5px rgba(122,127,140,.1)}.quality-strip.ready .quality-dot{background:#4ec88c;box-shadow:0 0 0 5px rgba(78,200,140,.12)}.quality-strip.loading .quality-dot{background:#f0b750;animation:qualityPulse 1s infinite}.quality-strip.partial .quality-dot,.quality-strip.error .quality-dot{background:#ef5774}@keyframes qualityPulse{50%{opacity:.35}}
+.pool-summary{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;padding:12px 0 4px;border-top:1px solid #292d38}.pool-summary b,.pool-summary span{display:block}.pool-summary span{color:#8e939f;margin-top:3px;font-size:.78rem}.pool-summary>div:last-child{display:flex;gap:7px}.pool-reveal{margin-top:14px;animation:poolReveal .22s ease both}@keyframes poolReveal{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+.mode-count{margin-left:auto;color:#8f94a2;font-size:.7rem;font-weight:900;letter-spacing:.1em}.v65-mode-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.v65-mode-card{min-height:104px;display:grid;grid-template-columns:46px 1fr 18px;align-items:center;gap:10px;padding:14px;text-align:left;color:#fff;border:1px solid #2c303c;border-radius:16px;background:linear-gradient(145deg,#171922,#101118);transition:.18s}.v65-mode-card>span{width:44px;height:44px;display:grid;place-items:center;border-radius:13px;background:#242733;font-size:1.25rem}.v65-mode-card b,.v65-mode-card small{display:block}.v65-mode-card small{margin-top:4px;color:#9297a4;line-height:1.35}.v65-mode-card em{font-style:normal;color:#676c79;font-size:1.4rem}.v65-mode-card:hover,.v65-mode-card.active{transform:translateY(-2px);border-color:#ef5774;box-shadow:0 10px 30px rgba(239,87,116,.12)}.v65-mode-card.active>span{background:linear-gradient(135deg,#845cff,#ef5774)}
+.mode-options-panel{border-color:#3c3447;background:linear-gradient(145deg,rgba(27,25,37,.95),rgba(13,14,20,.97))}.mode-option-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.option-block{min-width:0;padding:13px;border:1px solid #2c303b;border-radius:15px;background:#11131a}.option-block>small{display:block;color:#858a97;margin-top:8px;line-height:1.4}.tournament-source{margin-bottom:13px}.source-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px}.source-cards button{padding:13px;text-align:left;border:1px solid #303441;border-radius:13px;background:#151720;color:#fff}.source-cards b,.source-cards span{display:block}.source-cards span{color:#8d929f;margin-top:4px;font-size:.76rem}.source-cards button.active{border-color:#ef5774;background:#281822}.setup-warning{margin:13px 0 0;padding:11px;border-radius:12px;background:rgba(239,87,116,.09);color:#f3a4b3;border:1px solid rgba(239,87,116,.25)}
+.favorite-collection{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.favorite-collection article{display:grid;grid-template-columns:58px 1fr auto;align-items:center;gap:10px;padding:8px;border:1px solid #292d38;border-radius:14px;background:#13151d}.favorite-image{width:58px;height:72px;border-radius:10px;overflow:hidden;background:#0b0c11}.favorite-image img{width:100%;height:100%;object-fit:cover}.favorite-collection b,.favorite-collection span{display:block}.favorite-collection span{color:#858a97;margin-top:3px;font-size:.76rem}.collection-toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}.collection-toolbar span{color:#8d929e;font-size:.8rem}
+.stat-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}.stat-summary article{padding:15px;border:1px solid #2c303c;border-radius:16px;background:rgba(17,19,27,.92)}.stat-summary small,.stat-summary b,.stat-summary span{display:block}.stat-summary small{color:#8f94a1;font-weight:900;letter-spacing:.1em}.stat-summary b{font:900 2rem Manrope;margin:6px 0}.stat-summary span{color:#777d8a;font-size:.74rem}.stats-spotlight{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}.stats-spotlight article{display:grid;grid-template-columns:78px 1fr;gap:9px 12px;padding:12px;border:1px solid #2e323e;border-radius:17px;background:#13151d}.stats-spotlight article>small{grid-column:1/-1;color:#b2b6c2;font-weight:900;letter-spacing:.08em}.stats-spotlight article>img{width:78px;height:98px;object-fit:cover;border-radius:11px}.stats-spotlight h2{font-size:1rem;margin:3px 0}.stats-spotlight p{margin:0 0 7px;color:#8f94a0;font-size:.78rem}.stats-spotlight .positive{border-color:rgba(78,200,140,.4)}.stats-spotlight .negative{border-color:rgba(239,87,116,.4)}.stat-duel{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:4px}.stat-duel img{width:36px;height:52px;object-fit:cover;border-radius:7px}.stat-duel b{color:#ef5774}.mode-usage{display:grid;gap:8px}.mode-usage>div{position:relative;overflow:hidden;display:flex;justify-content:space-between;padding:11px 12px;border-radius:11px;background:#151720}.mode-usage i{position:absolute;left:0;bottom:0;height:3px;background:linear-gradient(90deg,#845cff,#ef5774)}.stats-tabs{display:flex;gap:6px;margin-bottom:12px;padding:4px;background:#0c0e14;border-radius:13px}.stats-tabs button{flex:1;padding:11px;border:0;border-radius:10px;background:transparent;color:#969ba8;font-weight:900}.stats-tabs button.active{background:#272a35;color:#fff}.stats-ranking-v65{display:grid;gap:7px}.stats-ranking-v65 article{display:grid;grid-template-columns:42px 48px 1fr auto;align-items:center;gap:9px;padding:8px;border:1px solid #292d38;border-radius:12px;background:#13151d}.stats-ranking-v65 article:not(:has(img)){grid-template-columns:42px 1fr auto}.stats-ranking-v65 img{width:48px;height:60px;object-fit:cover;border-radius:8px}.stats-ranking-v65 b,.stats-ranking-v65 span{display:block}.stats-ranking-v65 span{margin-top:3px;color:#858b98;font-size:.74rem}.stats-ranking-v65 em{font-style:normal;color:#ef8da0;font-weight:900}.reset-stats{margin-top:14px}
+.anime-team-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.anime-team-card{min-width:0;padding:0 0 14px;overflow:hidden;text-align:left;color:#fff;border:1px solid #303440;border-radius:20px;background:#11131a}.team-cover{position:relative;height:280px;overflow:hidden;background:#090a0e}.team-cover>img{width:100%;height:100%;object-fit:cover}.team-cover::after{content:"";position:absolute;inset:45% 0 0;background:linear-gradient(transparent,#11131a)}.team-cover>span{position:absolute;z-index:1;left:12px;bottom:10px;padding:6px 9px;border-radius:999px;background:rgba(7,8,12,.82);font-size:.7rem;font-weight:900}.anime-team-card h2{min-height:50px;margin:10px 13px 5px;font:900 1.2rem Manrope}.anime-team-card>b{display:block;margin:12px 13px 0;color:#ef8da0;font-size:.72rem;letter-spacing:.09em}.team-roster{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;padding:0 13px}.team-roster span{aspect-ratio:1;border-radius:50%;overflow:hidden;background:#242733}.team-roster img{width:100%;height:100%;object-fit:cover}.anime-champion{display:grid;grid-template-columns:260px 1fr;gap:20px;align-items:center;width:min(780px,100%);margin:10px auto 22px;padding:18px;border:1px solid #5b4930;border-radius:22px;background:rgba(18,17,21,.94)}.champion-cover{width:100%;aspect-ratio:2/3;object-fit:cover;border-radius:15px}.anime-champion .team-roster{padding:0;grid-template-columns:repeat(5,1fr)}
+.image-fallback{object-fit:cover!important;transform:none!important;filter:none!important}
+.global-loader-quality{display:inline-flex;margin-top:12px;padding:6px 9px;border-radius:999px;background:#20232d;color:#b7bbc7;font-size:.68rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase}
+@media(max-width:760px){
+ .v65-page,.v65-setup{width:min(100% - 18px,1180px);padding-top:16px}.home-banner{min-height:290px;margin-top:4px;border-radius:20px;background-image:linear-gradient(90deg,rgba(6,6,11,.08),rgba(6,6,11,.82) 34%,rgba(6,6,11,.82) 66%,rgba(6,6,11,.08)),var(--banner)}.home-banner>div{padding:24px 12px}.pool-tools,.mode-option-grid{grid-template-columns:1fr}.offline-tool{display:block}.offline-actions{justify-content:flex-start;margin-top:12px}.pool-summary{align-items:flex-start}.pool-summary>div:last-child{flex-direction:column}.v65-mode-grid{grid-template-columns:1fr 1fr}.v65-mode-card{min-height:126px;display:flex;flex-direction:column;align-items:flex-start;padding:12px}.v65-mode-card>span{width:38px;height:38px}.v65-mode-card em{display:none}.source-cards{grid-template-columns:1fr}.favorite-collection{grid-template-columns:1fr}.stat-summary{grid-template-columns:1fr 1fr}.stats-spotlight{grid-template-columns:1fr}.anime-team-grid{gap:7px}.team-cover{height:min(40vh,350px)}.anime-team-card{border-radius:15px}.anime-team-card h2{min-height:42px;margin:8px 9px 4px;font-size:.9rem}.anime-team-card>b{margin:9px}.team-roster{grid-template-columns:repeat(5,1fr);padding:0 9px;gap:3px}.anime-champion{grid-template-columns:110px 1fr;padding:11px;gap:12px}.anime-champion .team-roster{grid-template-columns:repeat(4,1fr)}
+ .game-view{min-height:100dvh;padding-top:max(12px,env(safe-area-inset-top));padding-bottom:max(12px,env(safe-area-inset-bottom))}.game-view .duel-grid{grid-template-columns:1fr 1fr;gap:7px}.game-view .duel-card{height:calc(100dvh - 185px);max-height:610px;display:flex;flex-direction:column}.game-view .duel-card img,.game-view.cinematic .duel-card img{height:100%;min-height:0;max-height:none;object-fit:cover}.game-view .duel-card div{margin-top:-104px;min-height:104px;padding:48px 9px 10px}.game-view .duel-card h2{font-size:.9rem}.game-view .duel-card small{font-size:.62rem}.game-shell.game-view{width:min(100% - 16px,520px);justify-content:flex-start}.game-shell .character-card{height:calc(100dvh - 205px);min-height:440px}.game-shell .character-card img{height:100%;min-height:100%;max-height:none}.game-shell .actions{position:sticky;bottom:max(6px,env(safe-area-inset-bottom));z-index:8;margin-top:8px;padding:6px;border:1px solid #2d303b;border-radius:16px;background:rgba(10,11,16,.9);backdrop-filter:blur(12px)}.game-shell .actions button{min-height:54px}
+}
+@media(max-width:390px){.v65-mode-grid{grid-template-columns:1fr 1fr}.v65-mode-card{min-height:136px}.v65-mode-card small{font-size:.68rem}.language-picker span{display:none}.language-picker{padding:0 5px}.stat-summary{grid-template-columns:1fr}.team-cover{height:35vh}}
+
+</style>
+</head>
+<body>
+<div id="appNav"></div>
+<div id="app"></div>
+<script>
+const ANILIST="https://graphql.anilist.co";
+const JIKAN="https://api.jikan.moe/v4";
+const CACHE_TTL=86400000;
+const STALE_CACHE_TTL=2592000000;
+const API_TIMEOUT=9000;
+const API_COOLDOWN=30000;
+const __apiCooldown={anilist:0,jikan:0};
+const state={screen:"setup",mode:"",searchText:"",anime:[],searchResults:[],selected:new Set(),locked:new Set(JSON.parse(localStorage.getItem("lockedCharacters")||"[]")),favorites:new Set(JSON.parse(localStorage.getItem("favoriteCharacters")||"[]")),favoriteData:JSON.parse(localStorage.getItem("favoriteCharacterData")||"{}"),disabledByAnime:JSON.parse(localStorage.getItem("disabledByAnime")||"{}"),gender:"BOTH",roundCount:25,rounds:[],index:0,busy:false,message:"",kmmChoices:{},previewAnime:null,previewChars:[],blindSlots:[],vsSession:null,tournament:null,tournamentSource:"normal",worldCup:null,wcQualifiers:2,wcAnimeSeeding:true,animeVs:null,animeVsTeamSize:20,autoMode:false,autoSeconds:15,autoPaused:false,autoTimer:null,autoTicker:null,autoDeadline:0,autoRemaining:15,gameSettingsOpen:false,cinematicMode:true,exitConfirm:false,mainMenuOpen:false,randomAnimeCount:20,randomStarting:false,poolCollapsed:localStorage.getItem("animePoolCollapsed")!=="false",offlineMode:localStorage.getItem("animeGameOfflineMode")==="true",loadingQuality:{status:"idle",loaded:0,total:0,failed:0,duplicates:0,sources:{}},statsTab:"characters",worldOverlay:null,worldUndo:[],stats:JSON.parse(localStorage.getItem("animeGameStats")||"{\"characters\":{},\"anime\":{},\"tournaments\":0,\"decisions\":0,\"modeCounts\":{},\"matchups\":{},\"actions\":{}}"),language:localStorage.getItem("animeGameLanguage")||"de"};
+const ASSET_BANNER="assets/home-banner-v1.png";
+const ASSET_BACKGROUND="assets/app-background-v1.png";
+const NO_IMAGE="assets/no-image-placeholder.svg";
+let __lastPoolSource="network";
+
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));}
+function cacheEntry(key){try{const x=JSON.parse(localStorage.getItem(key));return x&&Number(x.createdAt)&&x.value?x:null}catch{return null}}
+function cacheGet(key){const x=cacheEntry(key);return x&&Date.now()-x.createdAt<=CACHE_TTL?x.value:null}
+function cacheGetStale(key,maxAge=STALE_CACHE_TTL){const x=cacheEntry(key);return x&&Date.now()-x.createdAt<=maxAge?x.value:null}
+function cacheSet(key,value){try{localStorage.setItem(key,JSON.stringify({createdAt:Date.now(),value}))}catch{}}
+async function anilist(query,variables){
+ if(Date.now()<__apiCooldown.anilist)throw new Error("AniList ist vorübergehend pausiert.");
+ const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),API_TIMEOUT);
+ try{
+  const r=await fetch(ANILIST,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify({query,variables}),signal:controller.signal});
+  if(!r.ok){const e=new Error("AniList konnte nicht geladen werden ("+r.status+").");e.status=r.status;throw e}
+  const b=await r.json();
+  if(b.errors?.length){const e=new Error(b.errors[0].message||"AniList-Fehler");e.code="GRAPHQL";throw e}
+  return b.data;
+ }catch(raw){
+  const e=raw?.name==="AbortError"?Object.assign(new Error("AniList-Zeitüberschreitung."),{code:"TIMEOUT"}):raw;
+  if(e?.code!=="GRAPHQL"&&(!e?.status||e.status===429||e.status>=500))__apiCooldown.anilist=Date.now()+API_COOLDOWN;
+  throw e;
+ }finally{clearTimeout(timer)}
+}
+async function searchAnime(search){
+ const q=`query ($search:String){Page(page:1,perPage:12){media(search:$search,type:ANIME,sort:POPULARITY_DESC){idMal title{userPreferred} coverImage{large}}}}`;
+ try{
+  const d=await anilist(q,{search});
+  const results=(d?.Page?.media||[]).filter(m=>m.idMal).map(m=>({idMal:m.idMal,title:m.title.userPreferred,image:m.coverImage?.large||""}));
+  if(results.length)return results;
+ }catch(e){
+  console.warn("AniList nicht erreichbar, wechsle zu Jikan:",e);
+ }
+ // Automatischer Fallback, falls AniList durch CORS, DNS, Rate-Limit oder eine Störung blockiert wird.
+ const r=await jikan(`/anime?q=${encodeURIComponent(search)}&limit=12&sfw=true`);
+ const b=await r.json();
+ const results=(b.data||[]).filter(m=>m.mal_id).map(m=>({
+  idMal:m.mal_id,
+  title:m.title_english||m.title||m.title_japanese||"Unbekannter Anime",
+  image:m.images?.webp?.large_image_url||m.images?.jpg?.large_image_url||m.images?.webp?.image_url||m.images?.jpg?.image_url||""
+ }));
+ if(!results.length)throw new Error("Weder AniList noch die Ersatzquelle konnten Ergebnisse laden.");
+ return results;
+}
+async function fetchWithRetry(url,tries=2,timeoutMs=API_TIMEOUT){
+ let last;
+ for(let i=0;i<tries;i++){
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),timeoutMs);
+  try{
+   const r=await fetch(url,{signal:controller.signal});
+   clearTimeout(timer);
+   if(r.ok)return r;
+   last=Object.assign(new Error("HTTP "+r.status),{status:r.status});
+   if(![429,500,502,503,504].includes(r.status))throw last;
+  }catch(raw){
+   clearTimeout(timer);
+   const e=raw?.name==="AbortError"?Object.assign(new Error("Zeitüberschreitung"),{code:"TIMEOUT"}):raw;
+   if(e?.status&&![429,500,502,503,504].includes(e.status))throw e;
+   last=e;
+  }
+  if(i<tries-1)await new Promise(x=>setTimeout(x,800*(i+1)));
+ }
+ throw last||new Error("Netzwerkfehler");
+}
+async function jikan(path,tries=2,timeoutMs=API_TIMEOUT){
+ if(Date.now()<__apiCooldown.jikan)throw Object.assign(new Error("Jikan ist nach einem Serverfehler kurz pausiert."),{code:"COOLDOWN"});
+ try{return await fetchWithRetry(`${JIKAN}${path}`,tries,timeoutMs)}
+ catch(e){
+  if(e?.code==="TIMEOUT"||e?.code==="COOLDOWN"||!e?.status||e.status===429||e.status>=500)__apiCooldown.jikan=Date.now()+(e?.status===429?5000:API_COOLDOWN);
+  throw e;
+ }
+}
+async function importMalList(username){
+ const key="mal-list:"+username.toLowerCase(), cached=cacheGet(key); if(cached)return cached;
+ const all=[]; let page=1,hasNext=true, jikanFailed=false;
+ try{
+  while(hasNext&&page<=30){
+   const r=await jikan(`/users/${encodeURIComponent(username)}/animelist?page=${page}`);
+   const b=await r.json();
+   for(const item of b.data||[]){
+    const e=item.entry||item;
+    if(e?.mal_id)all.push({idMal:e.mal_id,title:e.title,image:e.images?.webp?.large_image_url||e.images?.jpg?.large_image_url});
+   }
+   hasNext=!!b.pagination?.has_next_page; page++;
+   if(hasNext)await new Promise(x=>setTimeout(x,450));
+  }
+ }catch(e){jikanFailed=true}
+
+ // Fallback: MALs öffentliche Listen-JSON-Schnittstelle. Je nach Browser kann MAL CORS blockieren.
+ if(jikanFailed && !all.length){
+  try{
+   let offset=0;
+   while(offset<3000){
+    const r=await fetch(`https://myanimelist.net/animelist/${encodeURIComponent(username)}/load.json?offset=${offset}&status=7`);
+    if(!r.ok)throw new Error("MAL HTTP "+r.status);
+    const b=await r.json();
+    if(!Array.isArray(b)||!b.length)break;
+    for(const e of b)if(e.anime_id)all.push({idMal:e.anime_id,title:e.anime_title,image:e.anime_image_path});
+    if(b.length<300)break;
+    offset+=300;
+   }
+  }catch(e){}
+ }
+ if(!all.length){
+  throw new Error("MAL-Import derzeit nicht erreichbar (Jikan 504/Timeout). Ich habe automatisch mehrfach neu versucht. Anime können weiterhin manuell hinzugefügt werden.");
+ }
+ const unique=[...new Map(all.map(a=>[a.idMal,a])).values()]; cacheSet(key,unique); return unique;
+}
+function offlinePoolKey(id){return `offline:characters:${id}`}
+function offlineGetPool(anime){
+ try{
+  const record=JSON.parse(localStorage.getItem(offlinePoolKey(anime.idMal))||"null");
+  return Array.isArray(record?.characters)?record.characters:null;
+ }catch{return null}
+}
+function offlinePutPool(anime,characters){
+ localStorage.setItem(offlinePoolKey(anime.idMal),JSON.stringify({version:1,savedAt:Date.now(),anime,characters}));
+ const library=JSON.parse(localStorage.getItem("offlineAnimeLibrary")||"{}");
+ library[anime.idMal]={...anime,savedAt:Date.now(),characters:characters.length};
+ localStorage.setItem("offlineAnimeLibrary",JSON.stringify(library));
+}
+function getOfflineSummary(){
+ try{
+  const library=JSON.parse(localStorage.getItem("offlineAnimeLibrary")||"{}");
+  const items=Object.values(library);return {anime:items.length,characters:items.reduce((n,x)=>n+(Number(x.characters)||0),0)};
+ }catch{return {anime:0,characters:0}}
+}
+function setOfflineMode(value){state.offlineMode=!!value;localStorage.setItem("animeGameOfflineMode",String(state.offlineMode));state.message=state.offlineMode?"Offline-Modus aktiv: Es werden nur manuell gespeicherte Daten verwendet.":"Online-Modus aktiv: Fehlende Daten dürfen wieder geladen werden.";render()}
+function togglePoolCollapsed(){state.poolCollapsed=!state.poolCollapsed;localStorage.setItem("animePoolCollapsed",String(state.poolCollapsed));render()}
+async function downloadSelectedOffline(){
+ const chosen=state.anime.filter(a=>state.selected.has(a.idMal));
+ if(!chosen.length){state.message="Wähle zuerst mindestens einen Anime für die Offline-Bibliothek aus.";render();return}
+ state.busy=true;state.loadingQuality={status:"loading",loaded:0,total:chosen.length,failed:0,duplicates:0,sources:{}};state.message="Offline-Daten werden vorbereitet …";render();
+ const failed=[];let saved=0;
+ for(let i=0;i<chosen.length;i++){
+  const anime=chosen[i];updateGlobalLoading(`Offline-Daten ${i+1}/${chosen.length}: ${anime.title}`,"download");
+  try{
+   const chars=await getCharacterPool(anime,{forceOnline:true});offlinePutPool(anime,chars);saved++;
+   state.loadingQuality.loaded=saved;state.loadingQuality.sources[__lastPoolSource]=(state.loadingQuality.sources[__lastPoolSource]||0)+1;
+   [anime.image,...chars.slice(0,20).map(c=>c.image)].filter(Boolean).forEach(src=>{const img=new Image();img.src=src});
+  }catch(e){failed.push(anime.title);state.loadingQuality.failed=failed.length}
+ }
+ state.loadingQuality.status=failed.length?(saved?"partial":"error"):"ready";state.busy=false;
+ state.message=saved?`${saved} Anime wurden manuell offline gespeichert${failed.length?`; ${failed.length} konnten nicht geladen werden`:""}.`:`Offline-Speichern fehlgeschlagen: ${failed.join(", ")||"keine Daten erreichbar"}.`;render();
+}
+function exportOfflinePackage(){
+ const library=JSON.parse(localStorage.getItem("offlineAnimeLibrary")||"{}");
+ const records=Object.keys(library).map(id=>JSON.parse(localStorage.getItem(offlinePoolKey(id))||"null")).filter(Boolean);
+ if(!records.length){state.message="Die Offline-Bibliothek ist noch leer.";render();return}
+ const blob=new Blob([JSON.stringify({version:1,exportedAt:new Date().toISOString(),records},null,2)],{type:"application/json"});
+ const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="anime-gamez-offline-paket.json";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+}
+function importOfflinePackageFile(input){
+ const file=input.files?.[0];if(!file)return;const reader=new FileReader();
+ reader.onload=()=>{try{const data=JSON.parse(String(reader.result||"{}"));if(!Array.isArray(data.records))throw new Error("Ungültiges Offline-Paket.");let count=0;for(const r of data.records){if(r?.anime?.idMal&&Array.isArray(r.characters)){offlinePutPool(r.anime,r.characters);count++}}state.message=`${count} Anime in die Offline-Bibliothek importiert.`}catch(e){state.message=e.message||"Offline-Import fehlgeschlagen."}input.value="";render()};reader.readAsText(file);
+}
+async function getCharacterPool(anime,options={}){
+ const permanent=offlineGetPool(anime);
+ if(state.offlineMode&&!options.forceOnline){if(permanent){__lastPoolSource="offline";return permanent}throw new Error(`${anime.title}: nicht manuell offline gespeichert.`)}
+ const key="characters:"+anime.idMal,cached=cacheGet(key),stale=cacheGetStale(key);if(cached){__lastPoolSource="cache";return cached}
+ const q=`query($idMal:Int){Media(idMal:$idMal,type:ANIME){characters(page:1,perPage:40,sort:[ROLE,FAVOURITES_DESC]){edges{role node{id name{full} image{large} gender favourites}}}}}`;
+ try{
+  const d=await anilist(q,{idMal:anime.idMal});
+  if(d?.Media){
+   const chars=d.Media.characters.edges.map(({role,node})=>({id:node.id,name:node.name.full,image:node.image.large,gender:node.gender==="Male"||node.gender==="Female"?node.gender:"Other",role,favourites:node.favourites||0,animeIdMal:anime.idMal,animeTitle:anime.title,source:"anilist"}));
+   if(chars.length){cacheSet(key,chars);__lastPoolSource="anilist";return chars}
+  }
+ }catch(e){console.warn("AniList-Charaktere nicht erreichbar, nutze Jikan:",e)}
+ try{
+  const r=await jikan(`/anime/${anime.idMal}/characters`),b=await r.json();
+  const chars=(b.data||[]).slice(0,40).map(x=>({id:x.character?.mal_id,name:x.character?.name||"Unbekannt",image:x.character?.images?.webp?.image_url||x.character?.images?.jpg?.image_url||"",gender:"Other",role:String(x.role||"SUPPORTING").toUpperCase(),favourites:Number(x.favorites)||0,animeIdMal:anime.idMal,animeTitle:anime.title,source:"mal"})).filter(c=>c.id&&c.image);
+  if(chars.length){cacheSet(key,chars);__lastPoolSource="jikan";return chars}
+  throw new Error("Keine Charakterdaten erhalten.");
+ }catch(e){
+  if(Array.isArray(stale)&&stale.length){console.warn("Verwende ältere Cache-Daten für",anime.title,e);__lastPoolSource="stale";return stale}
+  if(Array.isArray(permanent)&&permanent.length){console.warn("Verwende manuell gespeicherte Offline-Daten für",anime.title,e);__lastPoolSource="offline";return permanent}
+  throw new Error(`${anime.title}: Charakterdaten derzeit nicht erreichbar.`);
+ }
+}
+function relevance(c){return (c.role==="MAIN"?1000000:c.role==="SUPPORTING"?100000:0)+Math.min(c.favourites,99999)}
+function buildPool(chars,gender,limit=10){
+ const target=gender==="MALE"?"Male":gender==="FEMALE"?"Female":null;
+ const filtered=chars.filter(c=>target?c.gender===target:true).sort((a,b)=>relevance(b)-relevance(a));
+ if(gender!=="BOTH")return filtered.slice(0,limit);
+ const male=filtered.filter(c=>c.gender==="Male"),female=filtered.filter(c=>c.gender==="Female"),other=filtered.filter(c=>c.gender!=="Male"&&c.gender!=="Female"),a=Math.ceil(limit/2),b=Math.floor(limit/2);
+ const o1=[...male.slice(0,a),...female.slice(0,b)],o2=[...female.slice(0,a),...male.slice(0,b)];
+ const score=x=>x.reduce((s,c)=>s+relevance(c),0);let picked=score(o1)>=score(o2)?o1:o2;
+ if(picked.length<limit){const ids=new Set(picked.map(c=>c.id));picked=[...picked,...other.filter(c=>!ids.has(c.id)),...filtered.filter(c=>!ids.has(c.id))].slice(0,limit)}
+ return picked.sort((a,b)=>relevance(b)-relevance(a)).slice(0,limit);
+}
+function shuffle(x){x=[...x];for(let i=x.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[x[i],x[j]]=[x[j],x[i]]}return x}
+function createSession(pools,rounds){
+ const working=new Map([...pools].map(([id,p])=>[id,shuffle(p)])),usage=new Map(),result=[];let lastAnime=null,lastChar=null;
+ for(let i=0;i<rounds;i++){
+  let ids=[...working.keys()].filter(id=>(working.get(id)?.length||0)>0);
+  if(!ids.length){for(const [id,p]of pools)working.set(id,shuffle(p));ids=[...working.keys()].filter(id=>working.get(id).length)}
+  ids.sort((a,b)=>(usage.get(a)||0)-(usage.get(b)||0));const min=usage.get(ids[0])||0;
+  let cand=ids.filter(id=>(usage.get(id)||0)<=min+1);if(cand.length>1&&lastAnime!==null)cand=cand.filter(id=>id!==lastAnime);
+  const animeId=cand[Math.floor(Math.random()*cand.length)]??ids[0],bucket=working.get(animeId);
+  let ix=bucket.findIndex(c=>c.id!==lastChar);if(ix<0)ix=0;const character=bucket.splice(ix,1)[0];
+  result.push({...character,decision:null});usage.set(animeId,(usage.get(animeId)||0)+1);lastAnime=animeId;lastChar=character.id;
+ }
+ return result;
+}
+
+function createVsSession(pools,size){
+ const all=shuffle([...pools.values()].flat());
+ if(all.length<2)throw new Error("Für VS werden mindestens 2 passende Charaktere benötigt.");
+ const requested=Math.max(2,Math.min(Number(size)||10,all.length));
+ const usable=requested-requested%2;
+ const selected=all.slice(0,usable),pairs=[];
+ for(let i=0;i<selected.length;i+=2)pairs.push({a:selected[i],b:selected[i+1],winner:null,loser:null});
+ return {pairs,index:0,initialSize:usable,completed:false};
+}
+function chooseVs(id){
+ const v=state.vsSession,pair=v?.pairs[v.index];if(!pair)return;
+ const winner=pair.a.id===id?pair.a:pair.b,loser=pair.a.id===id?pair.b:pair.a;
+ pair.winner=winner;pair.loser=loser;recordDecision("vs",winner,[loser],"vs_win");
+ if(v.index+1>=v.pairs.length){v.completed=true;state.screen="results"}else v.index++;
+ render();
+}
+function createKmmSession(pools,rounds){
+ const all=[...pools.values()].flat();
+ if(all.length<3)throw new Error("Für Kiss Marry Kill werden mindestens 3 passende Charaktere benötigt.");
+ const out=[]; let deck=shuffle(all), lastIds=new Set();
+ for(let r=0;r<rounds;r++){
+  if(deck.length<3)deck=shuffle(all);
+  let picks=[];
+  // Prefer three different anime and avoid previous trio where possible.
+  for(const c of deck){
+   if(picks.length>=3)break;
+   if(lastIds.has(c.id)&&all.length>5)continue;
+   if(picks.some(x=>x.id===c.id))continue;
+   const sameAnime=picks.some(x=>x.animeIdMal===c.animeIdMal);
+   const alternatives=deck.some(x=>!picks.some(y=>y.id===x.id)&&!lastIds.has(x.id)&&!picks.some(y=>y.animeIdMal===x.animeIdMal));
+   if(sameAnime&&alternatives)continue;
+   picks.push(c);
+  }
+  if(picks.length<3){
+   for(const c of shuffle(all))if(!picks.some(x=>x.id===c.id)){picks.push(c);if(picks.length===3)break}
+  }
+  const used=new Set(picks.map(x=>x.id));deck=deck.filter(x=>!used.has(x.id));lastIds=used;
+  out.push({characters:picks,choices:{}});
+ }
+ return out;
+}
+
+function exportAnimePool(){
+ const payload={
+  version:1,
+  exportedAt:new Date().toISOString(),
+  anime:state.anime,
+  selected:[...state.selected],
+  disabledByAnime:state.disabledByAnime
+ };
+ const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement("a");
+ a.href=url;a.download="anime-pool.json";document.body.appendChild(a);a.click();a.remove();
+ URL.revokeObjectURL(url);
+}
+function importAnimePoolFile(input){
+ const file=input.files?.[0];if(!file)return;
+ const reader=new FileReader();
+ reader.onload=()=>{
+  try{
+   const data=JSON.parse(String(reader.result||"{}"));
+   if(!Array.isArray(data.anime))throw new Error("Ungültige Pool-Datei.");
+   state.anime=data.anime.filter(a=>a&&Number.isFinite(a.idMal)&&a.title);
+   state.selected=new Set(Array.isArray(data.selected)?data.selected:state.anime.map(a=>a.idMal));
+   state.disabledByAnime=data.disabledByAnime&&typeof data.disabledByAnime==="object"?data.disabledByAnime:{};
+   persistDisabled();
+   state.message=`${state.anime.length} Anime importiert.`;
+  }catch(e){state.message=e.message||"Import fehlgeschlagen."}
+  input.value="";render();
+ };
+ reader.readAsText(file);
+}
+async function calculateAvailableCharacters(){
+ const chosen=state.anime.filter(a=>state.selected.has(a.idMal));
+ if(!chosen.length)return 0;
+ const seen=new Set();let count=0;
+ for(const a of chosen){
+  let raw;
+  try{raw=await getCharacterPool(a)}catch(e){console.warn("Anime bei Verfügbarkeitsprüfung übersprungen:",a.title,e);continue}
+  const disabled=new Set(state.disabledByAnime[String(a.idMal)]||[]);
+  const pool=buildPool(raw,state.gender,10).filter(c=>!state.locked.has(c.id)&&!disabled.has(c.id)&&acceptUniqueCharacter(c,seen));
+  count+=pool.length;
+ }
+ return count;
+}
+async function calculateAvailabilityBreakdown(){
+ const chosen=state.anime.filter(a=>state.selected.has(a.idMal));
+ const seen={BOTH:new Set(),MALE:new Set(),FEMALE:new Set()};
+ const counts={BOTH:0,MALE:0,FEMALE:0};
+ for(const a of chosen){
+  let raw;
+  try{raw=await getCharacterPool(a)}catch(e){console.warn("Anime bei MAX-Prüfung übersprungen:",a.title,e);continue}
+  const disabled=new Set(state.disabledByAnime[String(a.idMal)]||[]);
+  for(const filter of ["BOTH","MALE","FEMALE"]){
+   const pool=buildPool(raw,filter,10).filter(c=>!state.locked.has(c.id)&&!disabled.has(c.id)&&acceptUniqueCharacter(c,seen[filter]));
+   counts[filter]+=pool.length;
+  }
+ }
+ return counts;
+}
+async function setMaxRounds(){
+ state.busy=true;state.message="Maximale Anzahl wird berechnet …";render();
+ try{
+  const counts=await calculateAvailabilityBreakdown();
+  const max=counts[state.gender];
+  state.roundCount=max;
+  state.message=max?`Aktueller Filter: ${max} · Beide: ${counts.BOTH} · Frauen: ${counts.FEMALE} · Männer: ${counts.MALE}. Pro Anime gelten maximal 10 Charaktere.`:"Keine verfügbaren Charaktere gefunden.";
+ }catch(e){state.message=e.message||"Maximum konnte nicht berechnet werden."}
+ finally{state.busy=false;render()}
+}
+function addAnime(items){state.anime=[...new Map([...state.anime,...items].map(a=>[a.idMal,a])).values()]}
+function modeLabel(mode){return ({smash:"Smash or Pass",kmm:"Kiss Marry Kill",blind:"Blind Ranking",vs:"Character VS",tournament:"Tournament",worldcup:"Weltmeisterschaft",animevs:"Anime vs Anime"}[mode]||"den gewählten Modus")}
+async function loadRandomAnimeMix(){
+ state.randomStarting=false;state.busy=true;state.message=`${state.randomAnimeCount} zufällige Anime werden zusammengestellt …`;render();
+ try{
+  const wanted=Math.max(5,Math.min(50,Number(state.randomAnimeCount)||20));
+  let found=[];
+  try{
+   const randomPage=1+Math.floor(Math.random()*6);
+   const q=`query($page:Int,$perPage:Int){Page(page:$page,perPage:$perPage){media(type:ANIME,sort:POPULARITY_DESC,isAdult:false){idMal title{userPreferred english romaji} coverImage{large}}}}`;
+   const d=await anilist(q,{page:randomPage,perPage:50});
+   found=(d?.Page?.media||[]).filter(m=>m.idMal).map(m=>({idMal:m.idMal,title:m.title?.english||m.title?.userPreferred||m.title?.romaji||"Unbekannter Anime",image:m.coverImage?.large||""}));
+  }catch(e){console.warn("AniList-Zufallsmix nicht erreichbar, nutze Jikan-Fallback:",e)}
+  if(found.length<wanted){
+   try{
+    const page=1+Math.floor(Math.random()*6);
+    const r=await jikan(`/top/anime?page=${page}&limit=25&filter=bypopularity`),b=await r.json();
+    const extra=(b.data||[]).filter(m=>m.mal_id).map(m=>({idMal:m.mal_id,title:m.title_english||m.title||m.title_japanese||"Unbekannter Anime",image:m.images?.webp?.large_image_url||m.images?.jpg?.large_image_url||m.images?.webp?.image_url||m.images?.jpg?.image_url||""}));
+    found=[...new Map([...found,...extra].map(a=>[a.idMal,a])).values()];
+   }catch(e){console.warn("Jikan-Zufallsmix ebenfalls nicht erreichbar:",e)}
+  }
+  if(found.length<wanted)found=[...new Map([...found,...state.anime].filter(a=>a?.idMal).map(a=>[a.idMal,a])).values()];
+  if(found.length<wanted)throw new Error("Die Anime-Dienste antworten gerade nicht zuverlässig. Bitte den Zufallsmix gleich noch einmal versuchen.");
+  const picked=shuffle(found).slice(0,wanted);
+  state.anime=picked;state.selected=new Set(picked.map(a=>a.idMal));state.searchResults=[];
+  state.poolCollapsed=true;localStorage.setItem("animePoolCollapsed","true");
+  state.message=`${picked.length} zufällige Anime wurden in den Pool geladen. Das Spiel startet erst, wenn du einen Modus auswählst.`;
+ }catch(e){state.message=e.message||"Der Zufallsmix konnte nicht geladen werden."}
+ finally{state.randomStarting=false;state.busy=false;render()}
+}
+async function doSearch(){
+ const q=state.searchText.trim();
+ if(!q||q.length<2){state.searchResults=[];render();return}
+ state.busy=true;state.message="Suche …";render();
+ try{state.searchResults=await searchAnime(q);state.message=""}
+ catch(e){state.searchResults=[];state.message=e.message}
+ finally{state.busy=false;render()}
+}
+function addSearchAnime(id){
+ const a=state.searchResults.find(x=>x.idMal===id);if(!a)return;
+ addAnime([a]);state.selected.add(a.idMal);
+ state.searchResults=state.searchResults.filter(x=>x.idMal!==id);render();
+}
+function removeAnime(id){state.anime=state.anime.filter(a=>a.idMal!==id);state.selected.delete(id);render()}
+
+async function doImport(){const u=document.querySelector("#mal")?.value.trim();if(!u)return;state.busy=true;state.message="MAL-Liste wird geladen …";render();try{const x=await importMalList(u);addAnime(x);state.message=x.length+" Anime importiert."}catch(e){state.message=e.message}finally{state.busy=false;render()}}
+
+function createBlindSession(pools,count){
+ const all=shuffle([...pools.values()].flat());
+ if(!all.length)throw new Error("Keine Charaktere verfügbar.");
+ const n=Math.min(Math.max(3,count),Math.max(3,all.length));
+ let chars=[];
+ while(chars.length<n){for(const c of shuffle(all)){if(chars.length>=n)break;chars.push(c)}}
+ return chars.map(c=>({...c,rank:null}));
+}
+
+
+
+
+
+function ensureStatsShape(){
+ const s=state.stats||(state.stats={});
+ s.characters=s.characters||{};s.anime=s.anime||{};s.matchups=s.matchups||{};
+ s.modeCounts=s.modeCounts||{};s.actions=s.actions||{};s.decisions=s.decisions||0;s.tournaments=s.tournaments||0;
+ return s;
+}
+function statCharacter(c){
+ const s=ensureStatsShape();
+ return s.characters[c.id]||(s.characters[c.id]={
+  name:c.name,animeTitle:c.animeTitle,image:c.image,
+  wins:0,losses:0,selected:0,rejected:0,smash:0,pass:0,kiss:0,marry:0,kill:0,
+  tournamentWins:0,worldTitles:0,finals:0,podiums:0,appearances:0
+ });
+}
+function statAnime(c){
+ const s=ensureStatsShape();
+ return s.anime[c.animeTitle]||(s.anime[c.animeTitle]={
+  wins:0,losses:0,selected:0,rejected:0,appearances:0,worldTitles:0,finals:0,podiums:0
+ });
+}
+function matchupKey(a,b){return [a.id,b.id].sort((x,y)=>x-y).join(":")}
+function recordDecision(mode,winner,losers=[],action="win"){
+ const s=ensureStatsShape();s.decisions++;s.modeCounts[mode]=(s.modeCounts[mode]||0)+1;s.actions[action]=(s.actions[action]||0)+1;
+ const participants=[winner,...losers].filter(Boolean);
+ participants.forEach(c=>{statCharacter(c).appearances++;statAnime(c).appearances++});
+ if(winner){
+  const cs=statCharacter(winner),as=statAnime(winner);
+  cs.wins++;cs.selected++;as.wins++;as.selected++;
+ }
+ losers.forEach(l=>{
+  const cs=statCharacter(l),as=statAnime(l);
+  cs.losses++;cs.rejected++;as.losses++;as.rejected++;
+  if(winner){
+   const key=matchupKey(winner,l);
+   const m=s.matchups[key]||(s.matchups[key]={a:{id:winner.id,name:winner.name,image:winner.image,animeTitle:winner.animeTitle},b:{id:l.id,name:l.name,image:l.image,animeTitle:l.animeTitle},wins:{}});
+   m.wins[winner.id]=(m.wins[winner.id]||0)+1;
+  }
+ });
+ localStorage.setItem("animeGameStats",JSON.stringify(s));
+}
+function recordAction(mode,c,action,positive=true){
+ const s=ensureStatsShape(),cs=statCharacter(c),as=statAnime(c);
+ s.decisions++;s.modeCounts[mode]=(s.modeCounts[mode]||0)+1;s.actions[action]=(s.actions[action]||0)+1;
+ cs.appearances++;as.appearances++;
+ if(positive){cs.selected++;cs.wins++;as.selected++;as.wins++}else{cs.rejected++;cs.losses++;as.rejected++;as.losses++}
+ cs[action]=(cs[action]||0)+1;
+ localStorage.setItem("animeGameStats",JSON.stringify(s));
+}
+function getFavoriteChar(){
+ return Object.values(ensureStatsShape().characters).sort((a,b)=>(b.selected-b.rejected)-(a.selected-a.rejected)||b.wins-a.wins||b.appearances-a.appearances)[0];
+}
+function getHatedChar(){
+ return Object.values(ensureStatsShape().characters).sort((a,b)=>(b.rejected-b.selected)-(a.rejected-a.selected)||b.losses-a.losses||b.appearances-a.appearances)[0];
+}
+function getTopNemesis(){
+ const all=Object.values(ensureStatsShape().matchups);
+ if(!all.length)return null;
+ return all.map(m=>{
+  const aw=m.wins[m.a.id]||0,bw=m.wins[m.b.id]||0;
+  return {...m,total:aw+bw,aw,bw}
+ }).sort((a,b)=>b.total-a.total)[0];
+}
+function getDominatedOpponent(charId){
+ const all=Object.values(ensureStatsShape().matchups).map(m=>{
+  const other=m.a.id===charId?m.b:m.a;
+  const wins=m.wins[charId]||0;
+  return {other,wins};
+ }).filter(x=>x.wins>0).sort((a,b)=>b.wins-a.wins);
+ return all[0]||null;
+}
+function pct(n,d){return d?Math.round(n/d*100):0}
+function saveWorldCup(){
+ if(!state.worldCup)return;
+ try{
+  localStorage.setItem("savedWorldCup",JSON.stringify({
+   worldCup:state.worldCup,gender:state.gender,roundCount:state.roundCount,
+   wcQualifiers:state.wcQualifiers,wcAnimeSeeding:state.wcAnimeSeeding,
+   savedAt:Date.now()
+  }));
+  state.message="Weltturnier gespeichert.";
+ }catch(e){state.message="Speichern fehlgeschlagen: Der Browser-Speicher ist möglicherweise voll."}
+}
+function hasSavedWorldCup(){return !!localStorage.getItem("savedWorldCup")}
+function resumeWorldCup(){
+ try{
+  const x=JSON.parse(localStorage.getItem("savedWorldCup")||"null");
+  if(!x?.worldCup)throw new Error();
+  state.worldCup=x.worldCup;state.gender=x.gender||"BOTH";state.roundCount=x.roundCount||16;
+  state.wcQualifiers=x.wcQualifiers||2;state.wcAnimeSeeding=x.wcAnimeSeeding!==false;
+  state.mode="worldcup";state.screen=state.worldCup.winner?"results":"game";state.message="Gespeichertes Weltturnier fortgesetzt.";render();
+ }catch(e){state.message="Der gespeicherte Spielstand konnte nicht geladen werden.";render()}
+}
+function clearSavedWorldCup(){localStorage.removeItem("savedWorldCup");state.message="Gespeichertes Weltturnier gelöscht.";render()}
+function pushWorldUndo(){
+ if(!state.worldCup)return;
+ try{
+  state.worldUndo.push(JSON.stringify(state.worldCup));
+  if(state.worldUndo.length>20)state.worldUndo.shift();
+ }catch(e){}
+}
+function undoWorldCup(){
+ const snap=state.worldUndo.pop();if(!snap)return;
+ state.worldCup=JSON.parse(snap);saveWorldCup();render();
+}
+function autoSaveWorldCup(){
+ if(!state.worldCup)return;
+ try{
+  localStorage.setItem("savedWorldCup",JSON.stringify({
+   worldCup:state.worldCup,gender:state.gender,roundCount:state.roundCount,
+   wcQualifiers:state.wcQualifiers,wcAnimeSeeding:state.wcAnimeSeeding,savedAt:Date.now()
+  }));
+ }catch(e){}
+}
+function showWorldOverlay(type){state.worldOverlay=type;render()}
+function closeWorldOverlay(){state.worldOverlay=null;render()}
+function worldActionBar(){
+ return `<div class="world-actions"><button onclick="showWorldOverlay('groups')">▦ Gruppen</button><button onclick="showWorldOverlay('bracket')">⌘ Turnierbaum</button><button onclick="undoWorldCup()" ${state.worldUndo.length?"":"disabled"}>↶ Rückgängig</button><button onclick="saveWorldCup()">💾 Speichern</button></div>`;
+}
+function renderGroupsOverview(w){
+ return `<div class="overlay"><div class="overlay-card large"><div class="overlay-head"><div><small>WELTMEISTERSCHAFT</small><h2>Alle Gruppen</h2></div><button onclick="closeWorldOverlay()">×</button></div><div class="groups-overview">${w.groups.map(g=>`<section><h3>Gruppe ${g.name}</h3>${groupSortedRows(g).map((x,i)=>`<div class="${g.resolvedTop2?.some(c=>c.id===x.character.id)?"qualified":""}"><strong>${i+1}</strong><span>${esc(x.character.name)}</span><b>${x.points} P</b></div>`).join("")}</section>`).join("")}</div></div></div>`;
+}
+function renderFullBracket(w){
+ if(!w.knockout)return `<div class="overlay"><div class="overlay-card"><div class="overlay-head"><h2>Turnierbaum</h2><button onclick="closeWorldOverlay()">×</button></div><p>Der Turnierbaum wird nach Abschluss der Gruppenphase erstellt.</p></div></div>`;
+ const t=w.knockout;
+ const rounds=[...new Set([t.roundSize,...t.history.map(x=>x.roundSize)])].sort((a,b)=>b-a);
+ return `<div class="overlay"><div class="overlay-card large"><div class="overlay-head"><div><small>AKTUELLE POSITION MARKIERT</small><h2>Turnierbaum</h2></div><button onclick="closeWorldOverlay()">×</button></div><div class="full-bracket">${rounds.map(size=>`<section><h3>${worldCupRoundLabel(size)}</h3>${t.history.filter(x=>x.roundSize===size).map(x=>`<div class="bracket-match done"><span>${esc(x.pair[0]?.name||"Freilos")}</span><b>${esc(x.winner.name)}</b><span>${esc(x.pair[1]?.name||"Freilos")}</span></div>`).join("")}${size===t.roundSize?Array.from({length:t.slots.length/2},(_,i)=>{const a=t.slots[i*2],b=t.slots[i*2+1],active=i===Math.floor(t.currentPairIndex/2);return `<div class="bracket-match ${active?"active":""}"><span>${esc(a?.name||"Freilos")}</span><i>vs</i><span>${esc(b?.name||"Freilos")}</span></div>`}).join(""):""}</section>`).join("")}</div></div></div>`;
+}
+function worldOverlayHtml(){
+ if(state.worldOverlay==="groups")return renderGroupsOverview(state.worldCup);
+ if(state.worldOverlay==="bracket")return renderFullBracket(state.worldCup);
+ return "";
+}
+function recordWorldCupStats(w){
+ const s=state.stats;s.tournaments=(s.tournaments||0)+1;
+ const podium=[w.winner,w.runnerUp,w.third,w.fourth].filter(Boolean);
+ podium.forEach((c,i)=>{
+  const cs=s.characters[c.id]||(s.characters[c.id]={name:c.name,animeTitle:c.animeTitle,image:c.image,wins:0,finals:0,podiums:0});
+  if(i===0){cs.worldTitles=(cs.worldTitles||0)+1;cs.wins++}if(i<2)cs.finals++;if(i<3)cs.podiums++;
+  const as=s.anime[c.animeTitle]||(s.anime[c.animeTitle]={wins:0,finals:0,podiums:0});
+  if(i===0){as.worldTitles=(as.worldTitles||0)+1;as.wins++}if(i<2)as.finals++;if(i<3)as.podiums++;
+ });
+ localStorage.setItem("animeGameStats",JSON.stringify(s));
+}
+function openStats(){state.screen="stats";render()}
+function resetStats(){if(confirm("Alle gespeicherten Statistiken löschen?")){state.stats={characters:{},anime:{},tournaments:0,decisions:0,modeCounts:{},matchups:{},actions:{}};localStorage.removeItem("animeGameStats");render()}}
+function createWorldCup(pools,size){
+ const all=shuffle([...pools.values()].flat());
+ if(all.length<8)throw new Error("Für den Weltmeister-Modus werden mindestens 8 Charaktere benötigt.");
+ const target=Math.max(8,Number(size)||16);
+ if(target>all.length)throw new Error(`Maximal ${all.length} Teilnehmer möglich.`);
+ const entrants=all.slice(0,target);
+
+ // Ziel: möglichst gleich große Gruppen mit 4–6 Charakteren.
+ // Dadurch funktionieren auch ungerade Teilnehmerzahlen sauber.
+ let groupCount=Math.max(2,Math.round(target/4));
+ while(Math.ceil(target/groupCount)>6)groupCount++;
+ while(groupCount>2&&Math.floor(target/groupCount)<4)groupCount--;
+
+ const base=Math.floor(target/groupCount),extra=target%groupCount;
+ const groups=Array.from({length:groupCount},(_,i)=>({
+  name:String.fromCharCode(65+i),
+  players:[],
+  targetSize:base+(i<extra?1:0),
+  matches:[],
+  table:{},
+  resolvedTop2:null
+ }));
+
+ let cursor=0;
+ for(const g of groups){
+  g.players=entrants.slice(cursor,cursor+g.targetSize);
+  cursor+=g.targetSize;
+ }
+ for(const g of groups){
+  for(const p of g.players)g.table[p.id]={character:p,played:0,wins:0,losses:0,points:0};
+  for(let i=0;i<g.players.length;i++)for(let j=i+1;j<g.players.length;j++)g.matches.push({a:g.players[i],b:g.players[j],winner:null});
+ }
+ return {
+  stage:"groups",groups,currentGroup:0,currentMatch:0,tiebreak:null,
+  qualifiers:[],knockout:null,thirdPlace:null,finalists:null,
+  winner:null,runnerUp:null,third:null,fourth:null,initialSize:target,qualifiersPerGroup:Math.max(1,Math.min(state.wcQualifiers,Math.min(...groups.map(g=>g.players.length-1))))
+ };
+}
+function groupSortedRows(group){
+ return Object.values(group.table).sort((a,b)=>b.points-a.points||b.wins-a.wins||a.character.name.localeCompare(b.character.name));
+}
+function prepareGroupResolution(w,groupIndex){
+ const g=w.groups[groupIndex],rows=groupSortedRows(g),q=Math.min(w.qualifiersPerGroup,rows.length);
+ if(rows.length<=q){g.resolvedTop2=rows.map(x=>x.character);return false}
+ const cutoff=rows[q-1].points;
+ const tied=rows.filter(x=>x.points===cutoff);
+ const locked=rows.filter(x=>x.points>cutoff).map(x=>x.character);
+ const slots=q-locked.length;
+ if(tied.length<=slots){g.resolvedTop2=[...locked,...tied.map(x=>x.character)].slice(0,q);return false}
+ w.tiebreak={groupIndex,candidates:tied.map(x=>x.character),selected:[],slots,locked};
+ w.stage="group_tiebreak";
+ return true;
+}
+function toggleTiebreakCandidate(id){
+ pushWorldUndo();
+ const tb=state.worldCup?.tiebreak;if(!tb)return;
+ const s=new Set(tb.selected);
+ s.has(id)?s.delete(id):s.add(id);
+ if(s.size>tb.slots)return;
+ tb.selected=[...s];render();
+}
+function confirmTiebreak(){
+ pushWorldUndo();
+ const w=state.worldCup,tb=w?.tiebreak;
+ if(!tb||tb.selected.length!==tb.slots)return;
+ const chosen=tb.candidates.filter(c=>tb.selected.includes(c.id));
+ w.groups[tb.groupIndex].resolvedTop2=[...tb.locked,...chosen].slice(0,w.qualifiersPerGroup);
+ w.tiebreak=null;w.stage="groups";autoSaveWorldCup();
+ advanceWorldCupGroupFlow();
+}
+function advanceWorldCupGroupFlow(){
+ const w=state.worldCup;
+ while(w.currentGroup<w.groups.length){
+  const g=w.groups[w.currentGroup];
+  if(w.currentMatch<g.matches.length){render();return}
+  if(!g.resolvedTop2 && prepareGroupResolution(w,w.currentGroup)){render();return}
+  w.currentGroup++;w.currentMatch=0;
+ }
+ buildWorldCupKnockout();render();
+}
+
+function nextPowerOfTwo(n){
+ return 2**Math.ceil(Math.log2(Math.max(2,n)));
+}
+function buildWorldCupKnockout(){
+ const w=state.worldCup,seedRows=[];
+ for(const g of w.groups){
+  (g.resolvedTop2||[]).forEach((character,i)=>seedRows.push({character,group:g.name,seed:i+1}));
+ }
+ const unique=[],ids=new Set();
+ for(const x of seedRows.sort((a,b)=>a.seed-b.seed)){
+  if(!ids.has(x.character.id)){ids.add(x.character.id);unique.push(x)}
+ }
+ const bracketSize=nextPowerOfTwo(unique.length),slots=Array(bracketSize).fill(null);
+ for(let i=0;i<unique.length;i++){
+  const pos=Math.floor(i*bracketSize/unique.length);let p=pos;
+  while(slots[p])p=(p+1)%bracketSize;slots[p]=unique[i];
+ }
+ for(let i=0;i<bracketSize;i+=2){
+  const a=slots[i],b=slots[i+1];
+  const conflict=a&&b&&(a.group===b.group||(state.wcAnimeSeeding&&a.character.animeTitle===b.character.animeTitle));
+  if(conflict){
+   const swap=slots.findIndex((x,j)=>j>i+1&&x&&x.group!==a.group&&(!state.wcAnimeSeeding||x.character.animeTitle!==a.character.animeTitle));
+   if(swap>0)[slots[i+1],slots[swap]]=[slots[swap],slots[i+1]];
+  }
+ }
+ w.qualifiers=unique.map(x=>x.character);
+ const knockoutSlots=slots.map(x=>x?.character||null);
+ w.knockout={slots:knockoutSlots,initialSlots:[...knockoutSlots],initialRoundSize:bracketSize,roundSlots:{[bracketSize]:[...knockoutSlots]},roundSize:bracketSize,history:[],semifinalLosers:[],currentPairIndex:0,nextSlots:[]};
+ w.stage="knockout";processWorldCupByes();autoSaveWorldCup();
+}
+function processWorldCupByes(){
+ const t=state.worldCup?.knockout;if(!t)return;
+ while(t.currentPairIndex<t.slots.length){
+  const a=t.slots[t.currentPairIndex],b=t.slots[t.currentPairIndex+1];
+  if(a&&b)break;
+  if(a||b)t.nextSlots.push(a||b);
+  t.currentPairIndex+=2;
+ }
+ if(t.currentPairIndex>=t.slots.length)advanceWorldCupKnockoutRound();
+}
+function advanceWorldCupKnockoutRound(){
+ const w=state.worldCup,t=w.knockout;
+ if(t.roundSize===4){
+  w.finalists=[...t.nextSlots];
+  w.thirdPlace=[...t.semifinalLosers];
+  w.stage="third_place";
+  return;
+ }
+ t.slots=[...t.nextSlots];
+ t.nextSlots=[];
+ t.roundSize=t.slots.length;
+ t.roundSlots=t.roundSlots||{};
+ t.roundSlots[t.roundSize]=[...t.slots];
+ t.currentPairIndex=0;
+ processWorldCupByes();
+}
+function getWorldCupCurrentPair(){
+ const t=state.worldCup?.knockout;
+ return t?[t.slots[t.currentPairIndex],t.slots[t.currentPairIndex+1]].filter(Boolean):[];
+}
+function worldCupRoundLabel(size){
+ if(size===2)return "Finale";
+ if(size===4)return "Halbfinale";
+ if(size===8)return "Viertelfinale";
+ if(size===16)return "Achtelfinale";
+ if(size===32)return "Runde der 32";
+ if(size===64)return "Runde der 64";
+ if(size===128)return "Runde der 128";
+ if(size===256)return "Runde der 256";
+ return `K.-o.-Runde der ${size}`;
+}
+
+function renderMiniBracket(w){
+ let current="Gruppen",steps=["Gruppen"];
+ if(w.stage==="group_tiebreak"){current="Tiebreak";steps=["Gruppen","Tiebreak","K.O.","Finale"]}
+ if(w.stage==="knockout"){
+  current=worldCupRoundLabel(w.knockout.roundSize);
+  const all=[256,128,64,32,16,8,4,2].filter(s=>s<=nextPowerOfTwo(w.qualifiers.length));
+  steps=["Gruppen",...all.map(worldCupRoundLabel)];
+ }
+ if(w.stage==="third_place"){current="Platz 3";steps=["Gruppen","K.O.","Halbfinale","Platz 3","Finale"]}
+ if(w.stage==="final"){current="Finale";steps=["Gruppen","K.O.","Halbfinale","Platz 3","Finale"]}
+ return `<div class="mini-bracket">${steps.map((s,i)=>`<div class="${s===current?"current":""}"><span>${s}</span>${i<steps.length-1?"<i>›</i>":""}</div>`).join("")}</div>`;
+}
+
+function wcTreePerson(c,winnerId){
+ if(!c)return `<div class="wc-person empty"><span>•</span><em>offen</em></div>`;
+ return `<div class="wc-person ${winnerId===c.id?"winner":""}"><img src="${esc(c.image||"")}" alt=""><em>${esc(c.name||"Unbekannt")}</em></div>`;
+}
+function wcTreeData(w){
+ const t=w?.knockout;
+ if(!t)return {size:32,rounds:{},history:{},current:null};
+ const size=Math.min(32,t.initialRoundSize||t.initialSlots?.length||Math.max(t.roundSize||2,2));
+ const rounds={};
+ if(t.roundSlots)for(const [k,v] of Object.entries(t.roundSlots))rounds[Number(k)]=v;
+ if(!rounds[size]&&t.initialSlots)rounds[size]=t.initialSlots;
+ if(!rounds[t.roundSize])rounds[t.roundSize]=t.slots;
+ // Zeige die bereits feststehenden Paarungen der nächsten Runde sofort an.
+ // t.nextSlots enthält die Gewinner der aktuell laufenden Runde in Baum-Reihenfolge.
+ // Vorher wurde roundSlots erst nach Abschluss der kompletten Runde gesetzt, wodurch
+ // z. B. das erste Achtelfinale trotz zweier feststehender Teilnehmer noch „offen“ blieb.
+ if(w.stage==="knockout"&&t.roundSize>2&&Array.isArray(t.nextSlots)&&t.nextSlots.length){
+  const nextSize=t.roundSize/2;
+  const preview=Array(nextSize).fill(null);
+  t.nextSlots.slice(0,nextSize).forEach((character,index)=>preview[index]=character||null);
+  const stored=rounds[nextSize]||[];
+  for(let i=0;i<Math.min(stored.length,nextSize);i++)if(stored[i])preview[i]=stored[i];
+  rounds[nextSize]=preview;
+ }
+ const history={};
+ for(const h of t.history||[]){
+  const rs=Math.min(32,h.roundSize);
+  (history[rs]||(history[rs]=[])).push(h);
+ }
+ return {size,rounds,history,current:w.stage==="knockout"?{size:t.roundSize,index:Math.floor(t.currentPairIndex/2)}:null};
+}
+function renderWorldCupTree(w){
+ const d=wcTreeData(w), W=1180,H=310,cx=W/2, top=28,bottom=292;
+ const stages=[32,16,8,4,2];
+ const leftX={32:70,16:210,8:340,4:455,2:535};
+ const rightX={32:1110,16:970,8:840,4:725,2:645};
+ const nodes=[],paths=[],labels=[];
+ function yFor(sideCount,index){return top+(bottom-top)*(index+.5)/sideCount}
+ function nodeInfo(size,matchIndex){
+  const arr=d.rounds[size]||[];
+  const a=arr[matchIndex*2]||null,b=arr[matchIndex*2+1]||null;
+  const hist=(d.history[size]||[])[matchIndex];
+  return {a,b,winner:hist?.winner||null,done:!!hist};
+ }
+ for(const size of stages){
+  const totalMatches=size/2, perSide=Math.max(1,totalMatches/2);
+  if(size>d.size)continue;
+  const label=size===32?"Letzte 32":worldCupRoundLabel(size);
+  labels.push(`<span class="wc-tree-label" style="left:${leftX[size]/W*100}%">${label}</span>`,`<span class="wc-tree-label" style="left:${rightX[size]/W*100}%">${label}</span>`);
+  for(let side=0;side<2;side++){
+   for(let i=0;i<perSide;i++){
+    const matchIndex=side===0?i:perSide+i;
+    const x=side===0?leftX[size]:rightX[size], y=yFor(perSide,i);
+    const inf=nodeInfo(size,matchIndex);
+    const current=!!d.current&&d.current.size===size&&d.current.index===matchIndex;
+    nodes.push(`<div class="wc-node ${current?"current":""} ${inf.done?"done":""} ${size===2?"final-node":""}" style="left:${x/W*100}%;top:${y/H*100}%">${wcTreePerson(inf.a,inf.winner?.id)}${wcTreePerson(inf.b,inf.winner?.id)}</div>`);
+    if(current)nodes.push(`<i class="wc-current-dot" style="left:${(x+(side===0?-64:64))/W*100}%;top:${y/H*100}%" title="Du bist hier"></i>`);
+    if(size>2){
+     const nextSize=size/2,nextI=Math.floor(i/2),nx=side===0?leftX[nextSize]:rightX[nextSize],ny=yFor(Math.max(1,perSide/2),nextI);
+     const sx=x+(side===0?58:-58), ex=nx+(side===0?-58:58),mx=(sx+ex)/2;
+     const cls=inf.done?"done":current?"current":"";
+     paths.push(`<path class="${cls}" d="M ${sx} ${y} H ${mx} V ${ny} H ${ex}"/>`);
+    }else{
+     const sx=x+(side===0?52:-52),ex=side===0?cx-48:cx+48;
+     paths.push(`<path class="${inf.done?"done":current?"current":""}" d="M ${sx} ${y} H ${ex}"/>`);
+    }
+   }
+  }
+ }
+ const champion=w?.winner;
+ const status=!w?.knockout?"Der K.-o.-Baum füllt sich nach der Gruppenphase automatisch.":"Der rote Punkt zeigt dein aktuelles Match. Sieger rücken sichtbar in den nächsten Ast vor.";
+ return `<section class="wc-tree-panel"><header class="wc-tree-head"><div><small>LIVE-TURNIERBAUM</small><b>Weg zum Weltmeister</b></div><span>Horizontal scrollen, um den gesamten Baum zu sehen</span></header><div class="wc-tree-scroll"><div class="wc-tree-canvas"><svg class="wc-tree-lines" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">${paths.join("")}</svg>${labels.join("")}${nodes.join("")}<div class="wc-champion">${champion?`<img src="${esc(champion.image)}" alt=""><span>${esc(champion.name)}</span>`:`<strong>♛</strong><span>CHAMPION</span>`}</div><div class="wc-tree-empty">${status}</div></div></div></section>`;
+}
+
+function chooseWorldCup(id){
+ pushWorldUndo();
+ const w=state.worldCup;if(!w)return;
+ if(w.stage==="groups"){
+  const g=w.groups[w.currentGroup],m=g.matches[w.currentMatch];if(!m)return;
+  const winner=m.a.id===id?m.a:m.b,loser=m.a.id===id?m.b:m.a;recordDecision("worldcup",winner,[loser],"group_win");
+  m.winner=winner;
+  g.table[winner.id].played++;g.table[winner.id].wins++;g.table[winner.id].points+=3;
+  g.table[loser.id].played++;g.table[loser.id].losses++;
+  w.currentMatch++;autoSaveWorldCup();advanceWorldCupGroupFlow();return;
+ }
+ if(w.stage==="third_place"){
+  const [a,b]=w.thirdPlace;w.third=a.id===id?a:b;w.fourth=a.id===id?b:a;recordDecision("worldcup",w.third,[w.fourth],"third_place");
+  w.stage="final";autoSaveWorldCup();render();return;
+ }
+ if(w.stage==="final"){
+  const [a,b]=w.finalists;w.winner=a.id===id?a:b;w.runnerUp=a.id===id?b:a;recordDecision("worldcup",w.winner,[w.runnerUp],"final_win");
+  recordWorldCupStats(w);localStorage.removeItem("savedWorldCup");
+  state.screen="results";render();return;
+ }
+ if(w.stage!=="knockout")return;
+ const t=w.knockout,pair=getWorldCupCurrentPair(),winner=pair.find(c=>c.id===id);if(!winner)return;
+ const loser=pair.find(c=>c.id!==id);recordDecision("worldcup",winner,loser?[loser]:[],"knockout_win");
+ t.history.push({pair,winner,roundSize:t.roundSize});
+ if(t.roundSize===4&&loser)t.semifinalLosers.push(loser);
+ t.nextSlots.push(winner);
+ t.currentPairIndex+=2;
+ processWorldCupByes();
+ autoSaveWorldCup();render();
+}
+function createTournament(pools,size){
+ const unique=shuffle([...pools.values()].flat());
+ if(unique.length<2)throw new Error("Für ein Tournament werden mindestens 2 Charaktere benötigt.");
+ const target=Math.max(2,Number(size)||16);
+ if(target>unique.length)throw new Error(`Maximal ${unique.length} Teilnehmer möglich. Es werden keine Charaktere doppelt verwendet.`);
+ const entrants=unique.slice(0,target);
+ return {remaining:entrants,next:[],match:1,winner:null,history:[],initialSize:target,placements:[]};
+}
+function chooseTournament(id){
+ const t=state.tournament;if(!t)return;
+ const pair=t.remaining.slice(0,2),winner=pair.find(c=>c.id===id);if(!winner)return;
+ const loser=pair.find(c=>c.id!==id);if(winner)recordDecision("tournament",winner,loser?[loser]:[],"tournament_win");
+ t.history.push({pair,winner,round:t.match});
+ if(loser)t.placements.push({character:loser,eliminatedRound:t.match});
+ t.next.push(winner);t.remaining=t.remaining.slice(2);
+ if(t.remaining.length===1){t.next.push(t.remaining[0]);t.remaining=[]}
+ if(!t.remaining.length){
+  if(t.next.length===1){
+   t.winner=t.next[0];
+   t.placements.push({character:t.winner,eliminatedRound:Infinity});
+   state.screen="results";render();return
+  }
+  t.remaining=shuffle(t.next);t.next=[];t.match++;
+ }
+ render();
+}
+function setBlindRank(rank){
+ const item=state.rounds[state.index];if(!item)return;
+ if(state.rounds.some((x,i)=>i!==state.index&&x.rank===rank))return;
+ item.rank=rank;
+ const size=state.rounds.length,positive=rank<=Math.ceil(size/2);
+ recordAction("blind",item,`rank_${rank}`,positive);
+ const cs=statCharacter(item);cs.rankPoints=(cs.rankPoints||0)+(size-rank+1);cs.rankCount=(cs.rankCount||0)+1;
+ localStorage.setItem("animeGameStats",JSON.stringify(state.stats));
+ if(state.index+1>=state.rounds.length)state.screen="results";else state.index++;
+ render();
+}
+function decide(d){
+ const c=state.rounds[state.index];if(!c)return;
+ c.decision=d;recordAction("smash",c,d,d==="smash");
+ if(state.index+1>=state.rounds.length)state.screen="results";else state.index++;
+ render()
+}
+
+function chooseKmm(charId,choice){
+ const round=state.rounds[state.index];
+ // One Kiss, one Marry, one Kill: choosing a used action moves it to the new character.
+ for(const id of Object.keys(round.choices))if(round.choices[id]===choice)delete round.choices[id];
+ round.choices[charId]=choice;
+ render();
+}
+function nextKmm(){
+ const round=state.rounds[state.index];
+ if(Object.keys(round.choices).length!==3)return;
+ for(const c of round.characters){
+  const choice=round.choices[c.id];
+  if(choice==="marry")recordAction("kmm",c,"marry",true);
+  else if(choice==="kiss")recordAction("kmm",c,"kiss",true);
+  else if(choice==="kill")recordAction("kmm",c,"kill",false);
+ }
+ if(state.index+1>=state.rounds.length)state.screen="results";else state.index++;
+ render();
+}
+function toggle(id){state.selected.has(id)?state.selected.delete(id):state.selected.add(id);render()}
+function all(){state.selected=state.selected.size===state.anime.length?new Set():new Set(state.anime.map(a=>a.idMal));render()}
+
+
+function persistDisabled(){localStorage.setItem("disabledByAnime",JSON.stringify(state.disabledByAnime))}
+function toggleDisabled(animeId,id){
+ const key=String(animeId),arr=new Set(state.disabledByAnime[key]||[]);
+ arr.has(id)?arr.delete(id):arr.add(id);state.disabledByAnime[key]=[...arr];persistDisabled();renderPreview();
+}
+async function openPool(animeId){
+ const a=state.anime.find(x=>x.idMal===animeId);if(!a)return;
+ state.previewAnime=a;state.previewChars=[];render();
+ try{state.previewChars=buildPool(await getCharacterPool(a),state.gender,10);renderPreview()}
+ catch(e){state.message=e.message;state.previewAnime=null;render()}
+}
+function closePreview(){state.previewAnime=null;state.previewChars=[];render()}
+function renderPreview(){
+ const modal=document.querySelector("#poolModal");if(!modal||!state.previewAnime)return;
+ const disabled=new Set(state.disabledByAnime[String(state.previewAnime.idMal)]||[]);
+ modal.innerHTML=`<div class="modal-card"><div class="modal-head"><div><span class="eyebrow">CHARAKTER-POOL</span><h2>${esc(state.previewAnime.title)}</h2><p>Tippe auf einen Charakter, um ihn für diesen Anime ein-/auszuschalten.</p></div><button onclick="closePreview()">×</button></div><div class="pool-grid">${state.previewChars.length?state.previewChars.map(c=>`<button class="pool-char ${disabled.has(c.id)?"disabled":""}" onclick="toggleDisabled(${state.previewAnime.idMal},${c.id})"><img src="${esc(c.image)}"><span>${esc(c.name)}</span><small>${c.role==="MAIN"?"Main":"Supporting"} · ${c.gender||"?"}</small><i>${disabled.has(c.id)?"Aus":"An"}</i></button>`).join(""):`<p>Charaktere werden geladen …</p>`}</div></div>`;
+}
+function persistLocks(){localStorage.setItem("lockedCharacters",JSON.stringify([...state.locked]))}
+function toggleLock(id){state.locked.has(id)?state.locked.delete(id):state.locked.add(id);persistLocks();render()}
+function repeatSession(){state.screen="setup";state.index=0;state.rounds=[];state.message="Einstellungen wurden beibehalten. Starte für eine neu gemischte Runde.";render()}
+function resultSection(title,items){return `<section class="panel"><div class="section-title"><div><h2>${title}</h2><p>${items.length} Charaktere</p></div></div><div class="result-grid">${items.map((r,i)=>`<article><img src="${esc(r.image)}" alt="${esc(r.name)}"><div><b>${esc(r.name)}</b><span>${esc(r.animeTitle)}</span></div><button class="fav-btn ${state.favorites.has(r.id)?"active":""}" onclick="toggleFavorite(${r.id})" title="Favorit">★</button><button class="lock-btn ${state.locked.has(r.id)?"active":""}" onclick="toggleLock(${r.id})" title="Charakter für zukünftige Runden sperren">${state.locked.has(r.id)?"🔒":"🔓"}</button></article>`).join("")}</div></section>`}
+
+function clearAutoTimer(){
+ if(state.autoTimer){clearTimeout(state.autoTimer);state.autoTimer=null}
+ if(state.autoTicker){clearInterval(state.autoTicker);state.autoTicker=null}
+}
+function updateCountdownDisplay(){
+ const number=document.querySelector('#countdownNumber'),ring=document.querySelector('#countdownRing');
+ if(!number||!ring)return;
+ const total=Math.max(10,Math.min(20,Number(state.autoSeconds)||15));
+ const remaining=state.autoPaused?state.autoRemaining:Math.max(0,(state.autoDeadline-Date.now())/1000);
+ number.textContent=Math.ceil(remaining);
+ ring.style.setProperty('--countdown-progress',`${Math.max(0,Math.min(1,remaining/total))*360}deg`);
+}
+function scheduleAutoAdvance(){
+ clearAutoTimer();
+ if(!state.autoMode||state.autoPaused||state.screen!=="game"||!(state.mode==="vs"||state.mode==="kmm"))return;
+ const seconds=Math.max(10,Math.min(20,Number(state.autoRemaining||state.autoSeconds)||15));
+ state.autoDeadline=Date.now()+seconds*1000;
+ state.autoTicker=setInterval(updateCountdownDisplay,100);
+ updateCountdownDisplay();
+ state.autoTimer=setTimeout(()=>{
+  state.autoRemaining=state.autoSeconds;
+  if(state.mode==="vs")autoAdvanceVs();else autoAdvanceKmm();
+ },seconds*1000);
+}
+function toggleAutoPause(){
+ if(!state.autoPaused)state.autoRemaining=Math.max(.1,(state.autoDeadline-Date.now())/1000);
+ else if(!state.autoRemaining)state.autoRemaining=state.autoSeconds;
+ state.autoPaused=!state.autoPaused;render();
+}
+function setAutoSeconds(v){state.autoSeconds=Math.max(10,Math.min(20,Number(v)||15));state.autoRemaining=state.autoSeconds;render()}
+function toggleAutoMode(v){state.autoMode=v;state.autoPaused=false;state.autoRemaining=state.autoSeconds;render()}
+function autoAdvanceVs(){const v=state.vsSession;if(!v?.pairs?.length)return;v.index=v.index+1>=v.pairs.length?0:v.index+1;render()}
+function autoAdvanceKmm(){const r=state.rounds?.[state.index];if(!r)return;state.index=state.index+1>=state.rounds.length?0:state.index+1;render()}
+function openGameSettings(){state.gameSettingsOpen=true;state.autoRemaining=state.autoMode&&!state.autoPaused?Math.max(.1,(state.autoDeadline-Date.now())/1000):state.autoRemaining;clearAutoTimer();render()}
+function closeGameSettings(){state.gameSettingsOpen=false;render()}
+function requestExitGame(){state.exitConfirm=true;render()}
+function cancelExitGame(){state.exitConfirm=false;render()}
+function exitGame(){
+ clearAutoTimer();state.screen="setup";state.index=0;state.rounds=[];state.vsSession=null;state.tournament=null;state.worldCup=null;
+ state.gameSettingsOpen=false;state.exitConfirm=false;state.autoPaused=false;state.autoRemaining=state.autoSeconds;state.message="Spiel wurde beendet.";render();
+}
+function gameTopButtons(){return `<div class="game-top-left"><button class="gear-button back-button" onclick="requestExitGame()" aria-label="Zurück zum Start">←</button></div><div class="game-top-buttons"><button class="gear-button" onclick="openGameSettings()" aria-label="Spieleinstellungen">⚙</button></div>`}
+function countdownWidget(label="NÄCHSTER WECHSEL"){
+ if(!state.autoMode)return "";
+ return `<div class="countdown-wrap"><div class="countdown-ring" id="countdownRing"><span id="countdownNumber">${Math.ceil(state.autoRemaining||state.autoSeconds)}</span></div><small>${state.autoPaused?"PAUSIERT":label}</small></div>`;
+}
+function gameSettingsOverlay(){
+ if(!state.gameSettingsOpen&&!state.exitConfirm)return "";
+ if(state.exitConfirm)return `<div class="game-menu-overlay"><div class="game-menu confirm-box"><span class="menu-kicker">SPIEL BEENDEN</span><h2>Zurück zum Start?</h2><p>Der aktuelle Durchlauf wird beendet. Bereits gespeicherte Statistiken bleiben erhalten.</p><div class="menu-actions"><button onclick="cancelExitGame()">Abbrechen</button><button class="danger" onclick="exitGame()">Spiel beenden</button></div></div></div>`;
+ const supportsAuto=state.mode==="vs"||state.mode==="kmm";
+ return `<div class="game-menu-overlay" onclick="if(event.target===this)closeGameSettings()"><div class="game-menu"><div class="menu-head"><div><span class="menu-kicker">SPIELEINSTELLUNGEN</span><h2>⚙ Optionen</h2></div><button class="menu-close" onclick="closeGameSettings()">×</button></div>
+ ${supportsAuto?`<label class="menu-switch"><span><b>Auto-/Video-Modus</b><small>Inhalte wechseln ohne Auswahl</small></span><input type="checkbox" ${state.autoMode?"checked":""} onchange="toggleAutoMode(this.checked)"></label>
+ ${state.autoMode?`<div class="menu-setting"><div><b>Wechselzeit</b><span>${state.autoSeconds} Sekunden</span></div><input type="range" min="10" max="20" step="1" value="${state.autoSeconds}" oninput="setAutoSeconds(this.value)"></div><label class="menu-switch"><span><b>Cinematic Mode</b><small>Mehr Bild, weniger Oberfläche</small></span><input type="checkbox" ${state.cinematicMode?"checked":""} onchange="state.cinematicMode=this.checked;render()"></label><button class="menu-wide" onclick="toggleAutoPause()">${state.autoPaused?"▶ Fortsetzen":"⏸ Pausieren"}</button>`:""}`:"<p class=\"menu-note\">Dieser Modus wird normal per Auswahl gespielt.</p>"}
+ <button class="menu-wide danger-outline" onclick="requestExitGame()">🚪 Spiel beenden</button></div></div>`;
+}
+function autoControls(){
+ if(!(state.mode==="vs"||state.mode==="kmm"))return "";
+ return `<div class="auto-controls ${state.autoMode?"active":""}"><label class="auto-toggle"><input type="checkbox" ${state.autoMode?"checked":""} onchange="toggleAutoMode(this.checked)"><span>Auto-/Video-Modus</span></label>${state.autoMode?`<div class="auto-row"><label>Wechsel nach <b>${state.autoSeconds}s</b><input type="range" min="10" max="20" value="${state.autoSeconds}" oninput="setAutoSeconds(this.value)"></label></div>`:""}</div>`;
+}
+
+const APP_LOGO='assets/anime-gamez-logo.png';
+const I18N={
+ de:{menu:"MENÜ",start:"Start & Spielmodi",startSub:"Anime-Pool und neue Runde",stats:"Statistiken",statsSub:"Entscheidungen und Rankings",favorites:"Favoriten",favoritesSub:"Deine markierten Charaktere",info:"Info & Rechtliches",infoSub:"Fanprojekt, Quellen und Disclaimer",pool:"Anime-Pool",poolHint:"Lege zuerst fest, welche Anime grundsätzlich mitspielen dürfen.",chooseMode:"Spielmodus wählen",chooseModeHint:"Danach erscheinen nur die Einstellungen, die zu diesem Modus gehören.",options:"Modus einstellen",gender:"Geschlecht",participants:"Teilnehmer",rounds:"Runden",startGame:"SPIEL STARTEN",search:"Anime suchen",random:"Zufallsmix",offline:"Offline-Bibliothek"},
+ en:{menu:"MENU",start:"Start & game modes",startSub:"Anime pool and a new game",stats:"Statistics",statsSub:"Decisions and rankings",favorites:"Favorites",favoritesSub:"Your marked characters",info:"Info & legal",infoSub:"Fan project, sources and disclaimer",pool:"Anime pool",poolHint:"First decide which anime may be used in your games.",chooseMode:"Choose a game mode",chooseModeHint:"Only settings relevant to that mode appear afterwards.",options:"Configure mode",gender:"Gender",participants:"Participants",rounds:"Rounds",startGame:"START GAME",search:"Search anime",random:"Random mix",offline:"Offline library"}
+};
+function tr(key){return I18N[state.language]?.[key]||I18N.de[key]||key}
+function setLanguage(language){state.language=language==="en"?"en":"de";localStorage.setItem("animeGameLanguage",state.language);document.documentElement.lang=state.language;render()}
+function favoriteHas(id){return state.favorites.has(id)||state.favorites.has(String(id))||state.favorites.has(Number(id))}
+function findCharacterById(id){
+ const key=String(id),stored=state.favoriteData?.[key];if(stored)return {...stored,id:stored.id??id};
+ const stat=ensureStatsShape().characters[key];if(stat)return {...stat,id:Number.isNaN(Number(id))?id:Number(id)};
+ const roots=[state.rounds,state.vsSession,state.tournament,state.worldCup];const seen=new WeakSet();let found=null;
+ function walk(value,depth=0){if(found||depth>8||value==null)return;if(Array.isArray(value)){for(const x of value)walk(x,depth+1);return}if(typeof value!=="object"||seen.has(value))return;seen.add(value);if(String(value.id)===key&&value.name){found=value;return}for(const x of Object.values(value))walk(x,depth+1)}
+ roots.forEach(x=>walk(x));return found?{id:found.id,name:found.name,animeTitle:found.animeTitle||"",image:found.image||"",gender:found.gender||"Other",role:found.role||"SUPPORTING",animeIdMal:found.animeIdMal}:null;
+}
+function getFavoriteCharacters(){
+ const out=[];let migrated=false;for(const id of state.favorites){const c=findCharacterById(id);if(c&&!out.some(x=>String(x.id)===String(c.id))){out.push(c);if(!state.favoriteData[String(id)]){state.favoriteData[String(id)]={...c,id:c.id??id};migrated=true}}}if(migrated)localStorage.setItem("favoriteCharacterData",JSON.stringify(state.favoriteData));
+ return out.sort((a,b)=>String(a.animeTitle||"").localeCompare(String(b.animeTitle||""))||String(a.name).localeCompare(String(b.name)));
+}
+function persistFavorites(){localStorage.setItem("favoriteCharacters",JSON.stringify([...state.favorites]));localStorage.setItem("favoriteCharacterData",JSON.stringify(state.favoriteData||{}))}
+function toggleFavorite(id){
+ const exists=favoriteHas(id);for(const value of [...state.favorites])if(String(value)===String(id))state.favorites.delete(value);
+ if(exists)delete state.favoriteData[String(id)];else{state.favorites.add(id);const c=findCharacterById(id);if(c)state.favoriteData[String(id)]={...c,id:c.id??id}}
+ persistFavorites();render();
+}
+function startFavoriteTournament(){state.screen="setup";state.mode="tournament";state.tournamentSource="favorites";state.roundCount=Math.min(16,Math.max(2,getFavoriteCharacters().length));render();setTimeout(()=>document.querySelector("#modeOptions")?.scrollIntoView({behavior:"smooth",block:"start"}),50)}
+function renderFavoritesV65(){
+ const chars=getFavoriteCharacters();return `<main class="page v65-page"><header class="v65-title"><span class="eyebrow">${state.language==="de"?"DEINE SAMMLUNG":"YOUR COLLECTION"}</span><h1>${state.language==="de"?"Meine":"My"} <em>${tr("favorites")}</em></h1><p>${state.language==="de"?"Favoriten werden jetzt vollständig gespeichert und bleiben auch ohne Statistik-Eintrag sichtbar.":"Favorites are now stored with their full data and remain visible without a statistics entry."}</p><button class="primary" ${chars.length<2?"disabled":""} onclick="startFavoriteTournament()">🏆 ${state.language==="de"?"Turnier aus Favoriten":"Tournament from favorites"}</button></header><section class="panel"><div class="collection-toolbar"><b>${chars.length} ${tr("favorites")}</b><span>${chars.length<2?(state.language==="de"?"Mindestens zwei Favoriten für ein Turnier nötig":"At least two favorites are needed for a tournament"):state.language==="de"?"Bereit für ein eigenes Turnier":"Ready for a custom tournament"}</span></div><div class="favorite-collection">${chars.length?chars.map(c=>`<article><div class="favorite-image"><img src="${esc(c.image||NO_IMAGE)}" alt="${esc(c.name)}"></div><div><b>${esc(c.name)}</b><span>${esc(c.animeTitle||"—")}</span></div><button class="fav-btn active" onclick="toggleFavorite(${JSON.stringify(c.id)})" aria-label="Favorit entfernen">★</button></article>`).join(""):`<div class="empty-state"><h3>${state.language==="de"?"Noch keine Favoriten":"No favorites yet"}</h3><p>${state.language==="de"?"Markiere Figuren nach einer Entscheidung mit dem Stern.":"Mark characters with the star after a decision."}</p></div>`}</div></section></main>`;
+}
+function selectMode(mode){
+ const defaults={smash:25,kmm:10,blind:10,vs:20,tournament:16,worldcup:16,animevs:4};state.mode=mode;state.roundCount=defaults[mode]||10;
+ if(mode!=="tournament")state.tournamentSource="normal";render();setTimeout(()=>document.querySelector("#modeOptions")?.scrollIntoView({behavior:"smooth",block:"start"}),40);
+}
+function setStatsTab(tab){state.statsTab=tab;render()}
+function renderStatsV65(){
+ const s=ensureStatsShape(),charEntries=Object.entries(s.characters).sort((a,b)=>(b[1].selected||0)-(a[1].selected||0)||(b[1].wins||0)-(a[1].wins||0)),animeEntries=Object.entries(s.anime).sort((a,b)=>(b[1].selected||0)-(a[1].selected||0)||(b[1].wins||0)-(a[1].wins||0));
+ const fav=getFavoriteChar(),hate=getHatedChar(),nemesis=getTopNemesis(),modeEntries=Object.entries(s.modeCounts).sort((a,b)=>b[1]-a[1]);
+ const ranking=state.statsTab==="anime"?animeEntries:charEntries;
+ return `<main class="page v65-page stats-v65"><header class="v65-title"><span class="eyebrow">${state.language==="de"?"DEIN SPIELVERLAUF":"YOUR GAME HISTORY"}</span><h1>${tr("stats")}</h1><p>${state.language==="de"?"Entscheidungen, Favoriten und Ergebnisse – klar nach Wichtigkeit geordnet.":"Decisions, favorites and results – ordered by importance."}</p></header><section class="stat-summary"><article><small>${state.language==="de"?"ENTSCHEIDUNGEN":"DECISIONS"}</small><b>${s.decisions||0}</b><span>${state.language==="de"?"über alle Modi":"across all modes"}</span></article><article><small>${tr("favorites").toUpperCase()}</small><b>${getFavoriteCharacters().length}</b><span>${state.language==="de"?"gespeicherte Figuren":"saved characters"}</span></article><article><small>${state.language==="de"?"WELTTURNIERE":"WORLD CUPS"}</small><b>${s.tournaments||0}</b><span>${state.language==="de"?"abgeschlossen":"completed"}</span></article><article><small>${state.language==="de"?"ANIME ERFASST":"ANIME TRACKED"}</small><b>${animeEntries.length}</b><span>${state.language==="de"?"in der Statistik":"in statistics"}</span></article></section>${fav||hate||nemesis?`<section class="stats-spotlight">${fav?`<article class="positive"><small>★ ${state.language==="de"?"LIEBLING":"FAVORITE"}</small><img src="${esc(fav.image||NO_IMAGE)}"><div><h2>${esc(fav.name)}</h2><p>${esc(fav.animeTitle)}</p><b>${fav.selected||0}× ${state.language==="de"?"gewählt":"selected"}</b></div></article>`:""}${hate?`<article class="negative"><small>↓ ${state.language==="de"?"OFT ABGELEHNT":"MOST REJECTED"}</small><img src="${esc(hate.image||NO_IMAGE)}"><div><h2>${esc(hate.name)}</h2><p>${esc(hate.animeTitle)}</p><b>${hate.rejected||0}× ${state.language==="de"?"abgelehnt":"rejected"}</b></div></article>`:""}${nemesis?`<article><small>⚔ ${state.language==="de"?"HÄUFIGSTES DUELL":"TOP MATCHUP"}</small><div class="stat-duel"><img src="${esc(nemesis.a.image||NO_IMAGE)}"><b>${nemesis.aw}:${nemesis.bw}</b><img src="${esc(nemesis.b.image||NO_IMAGE)}"></div><div><h2>${esc(nemesis.a.name)} · ${esc(nemesis.b.name)}</h2><p>${nemesis.total} ${state.language==="de"?"Begegnungen":"matches"}</p></div></article>`:""}</section>`:""}<section class="panel"><div class="section-title"><div><h2>${state.language==="de"?"Nutzung nach Modus":"Usage by mode"}</h2><p>${state.language==="de"?"Welche Spiele du am häufigsten spielst.":"Which games you play most often."}</p></div></div><div class="mode-usage">${modeEntries.length?modeEntries.map(([mode,count])=>`<div><b>${esc(modeLabel(mode))}</b><span>${count}</span><i style="width:${Math.round(count/Math.max(1,modeEntries[0][1])*100)}%"></i></div>`).join(""):`<p>${state.language==="de"?"Noch keine Modusdaten vorhanden.":"No mode data yet."}</p>`}</div></section><section class="panel"><div class="stats-tabs"><button class="${state.statsTab==="characters"?"active":""}" onclick="setStatsTab('characters')">${state.language==="de"?"Charaktere":"Characters"}</button><button class="${state.statsTab==="anime"?"active":""}" onclick="setStatsTab('anime')">Anime</button></div><div class="stats-ranking-v65">${ranking.length?ranking.slice(0,100).map(([id,item],i)=>state.statsTab==="anime"?`<article><strong>#${i+1}</strong><div><b>${esc(id)}</b><span>${item.selected||0} ${state.language==="de"?"gewählt":"selected"} · ${item.rejected||0} ${state.language==="de"?"abgelehnt":"rejected"} · ${item.worldTitles||0} ${state.language==="de"?"Titel":"titles"}</span></div><em>${pct(item.wins||0,item.appearances||0)}%</em></article>`:`<article><strong>#${i+1}</strong><img src="${esc(item.image||NO_IMAGE)}"><div><b>${esc(item.name)}</b><span>${esc(item.animeTitle||"")} · ${item.selected||0} ${state.language==="de"?"gewählt":"selected"} · ${item.rejected||0} ${state.language==="de"?"abgelehnt":"rejected"}</span></div><em>${pct(item.wins||0,item.appearances||0)}%</em></article>`).join(""):`<div class="empty-state"><h3>${state.language==="de"?"Noch keine Daten":"No data yet"}</h3><p>${state.language==="de"?"Spiele eine Runde, damit hier Rankings entstehen.":"Play a game to build your rankings."}</p></div>`}</div><button class="ghost reset-stats" onclick="resetStats()">${state.language==="de"?"Statistiken zurücksetzen":"Reset statistics"}</button></section></main>`;
+}
+function animeFamilyKey(title){return String(title||"").toLowerCase().normalize("NFKD").replace(/[^a-z0-9 ]/g," ").replace(/\b(season|staffel|part|cour|chapter|movie|film|ova|special|the|a|an|2nd|3rd|final|ii|iii|iv|[0-9]+)\b/g," ").split(/\s+/).filter(Boolean).slice(0,2).join("-")}
+function characterIdentityKeys(c){const name=String(c.name||"").toLowerCase().normalize("NFKD").replace(/[^a-z0-9]/g,"");return [`id:${c.source||"legacy"}:${c.id}`,`name:${name}:${animeFamilyKey(c.animeTitle)}`]}
+function acceptUniqueCharacter(c,seen){const keys=characterIdentityKeys(c);if(keys.some(k=>seen.has(k)))return false;keys.forEach(k=>seen.add(k));return true}
+function createAnimeVsSession(pools,anime,size){
+ const teams=anime.filter(a=>pools.has(a.idMal)).map(a=>({idMal:a.idMal,title:a.title,image:a.image||"",roster:pools.get(a.idMal)}));
+ if(teams.length<2)throw new Error("Für Anime vs Anime werden mindestens zwei Anime mit passenden Charakteren benötigt.");
+ const target=Math.max(2,Math.min(Number(size)||teams.length,teams.length)),entrants=shuffle(teams).slice(0,target);return {remaining:entrants,next:[],round:1,initialSize:target,winner:null,history:[]};
+}
+function recordAnimeVsDecision(winner,loser){const s=ensureStatsShape();s.decisions++;s.modeCounts.animevs=(s.modeCounts.animevs||0)+1;s.actions.anime_vs_win=(s.actions.anime_vs_win||0)+1;const win=s.anime[winner.title]||(s.anime[winner.title]={wins:0,losses:0,selected:0,rejected:0,appearances:0});const lose=s.anime[loser.title]||(s.anime[loser.title]={wins:0,losses:0,selected:0,rejected:0,appearances:0});win.wins++;win.selected++;win.appearances++;lose.losses++;lose.rejected++;lose.appearances++;localStorage.setItem("animeGameStats",JSON.stringify(s))}
+function chooseAnimeVs(idMal){const v=state.animeVs,pair=v?.remaining.slice(0,2),winner=pair?.find(x=>x.idMal===idMal);if(!winner)return;const loser=pair.find(x=>x.idMal!==idMal);recordAnimeVsDecision(winner,loser);v.history.push({pair,winner,round:v.round});v.next.push(winner);v.remaining=v.remaining.slice(2);if(v.remaining.length===1){v.next.push(v.remaining[0]);v.remaining=[]}if(!v.remaining.length){if(v.next.length===1){v.winner=v.next[0];state.screen="results";render();return}v.remaining=shuffle(v.next);v.next=[];v.round++}render()}
+function rosterFaces(team){return `<div class="team-roster">${team.roster.slice(0,20).map(c=>`<span title="${esc(c.name)}"><img src="${esc(c.image||NO_IMAGE)}" alt=""></span>`).join("")}</div>`}
+function renderAnimeVsGameV65(){const v=state.animeVs,pair=v?.remaining.slice(0,2);if(!pair?.length)return "";const done=v.initialSize-(v.remaining.length+v.next.length);return `<main class="kmm-shell game-view anime-vs-game">${gameTopButtons()}<div class="progress-row"><span>ANIME VS ANIME · ${state.language==="de"?"RUNDE":"ROUND"} ${v.round}</span><b>${Math.max(1,done+1)} / ${Math.max(1,v.initialSize-1)}</b></div><div class="progress"><i style="width:${Math.min(100,((done+1)/Math.max(1,v.initialSize-1))*100)}%"></i></div><p class="tournament-note">${state.language==="de"?"Wähle den Anime, dessen Team weiterkommt.":"Choose the anime whose team advances."}</p><div class="anime-team-grid">${pair.map(team=>`<button class="anime-team-card" onclick="chooseAnimeVs(${team.idMal})"><div class="team-cover"><img src="${esc(team.image||NO_IMAGE)}" alt="${esc(team.title)}"><span>${team.roster.length} ${state.language==="de"?"Charaktere":"characters"}</span></div><h2>${esc(team.title)}</h2>${rosterFaces(team)}<b>${state.language==="de"?"TEAM WÄHLEN":"CHOOSE TEAM"}</b></button>`).join("")}</div>${gameSettingsOverlay()}</main>`}
+function renderAnimeVsResultV65(){const winner=state.animeVs?.winner;if(!winner)return "";return `<main class="page v65-page"><header class="v65-title"><span class="eyebrow">ANIME VS ANIME · CHAMPION</span><h1>${esc(winner.title)}</h1><p>${state.language==="de"?"Dieses Team hat sich durch das gesamte Duellfeld gespielt.":"This team won the full bracket."}</p></header><section class="anime-champion"><img class="champion-cover" src="${esc(winner.image||NO_IMAGE)}" alt="${esc(winner.title)}"><div><h2>${winner.roster.length} ${state.language==="de"?"Teammitglieder":"team members"}</h2>${rosterFaces(winner)}</div></section><div class="result-actions"><button class="primary" onclick="repeatSession()">↻ ${state.language==="de"?"Wiederholen":"Repeat"}</button><button class="primary secondary" onclick="state.screen='setup';render()">${tr("options")}</button></div></main>`}
+function modeRoundChoices(mode){return mode==="animevs"?[2,4,8,16]:mode==="worldcup"?[8,16,32,64]:mode==="tournament"?[4,8,16,32]:mode==="blind"?[5,8,10]:[10,25,50,100]}
+function genderButtons(){return [["FEMALE",state.language==="de"?"Frauen":"Women"],["BOTH",state.language==="de"?"Beide":"All"],["MALE",state.language==="de"?"Männer":"Men"]].map(([v,l])=>`<button class="${state.gender===v?"active":""}" onclick="state.gender='${v}';render()">${l}</button>`).join("")}
+function filteredFavoriteCount(){const target=state.gender==="MALE"?"Male":state.gender==="FEMALE"?"Female":null;return getFavoriteCharacters().filter(c=>!target||c.gender===target||!c.gender||c.gender==="Other").length}
+function setFavoriteMax(){state.roundCount=Math.max(2,filteredFavoriteCount());render()}
+function renderModeOptionsV65(){
+ if(!state.mode)return "";const tournamentFavorites=state.mode==="tournament"&&state.tournamentSource==="favorites",poolCount=state.selected.size,favoriteCount=filteredFavoriteCount(),requiresTwo=state.mode==="animevs",ready=tournamentFavorites?favoriteCount>=2:requiresTwo?poolCount>=2:poolCount>=1;const roundsLabel=["tournament","worldcup","vs","animevs"].includes(state.mode)?tr("participants"):tr("rounds");
+ return `<section class="panel mode-options-panel" id="modeOptions"><div class="section-title"><b>03</b><div><h2>${tr("options")}: ${esc(modeLabel(state.mode))}</h2><p>${state.language==="de"?"Alle Regeln für diesen Modus stehen gesammelt an einer Stelle.":"All rules for this mode are grouped in one place."}</p></div><button class="ghost" onclick="state.mode='';render()">${state.language==="de"?"Ändern":"Change"}</button></div>${state.mode==="tournament"?`<div class="option-block tournament-source"><label>${state.language==="de"?"Teilnehmerquelle":"Participant source"}</label><div class="source-cards"><button class="${state.tournamentSource==="normal"?"active":""}" onclick="state.tournamentSource='normal';render()"><b>${state.language==="de"?"Normaler Anime-Pool":"Regular anime pool"}</b><span>${poolCount} ${state.language==="de"?"Anime aktiv":"anime active"}</span></button><button class="${state.tournamentSource==="favorites"?"active":""}" onclick="state.tournamentSource='favorites';render()"><b>★ ${tr("favorites")}</b><span>${favoriteCount} ${state.language==="de"?"passende Figuren":"matching characters"}</span></button></div></div>`:""}<div class="mode-option-grid"><div class="option-block"><label>${tr("gender")}</label><div class="segmented">${genderButtons()}</div></div><div class="option-block"><label>${roundsLabel}</label><div class="rounds">${modeRoundChoices(state.mode).map(n=>`<button class="${state.roundCount===n?"active":""}" onclick="state.roundCount=${n};render()">${n}</button>`).join("")}${["tournament","worldcup","vs"].includes(state.mode)?`<button onclick="${tournamentFavorites?"setFavoriteMax()":"setMaxRounds()"}">MAX</button>`:""}<input type="number" min="1" max="500" value="${state.roundCount}" onchange="state.roundCount=Math.max(1,Number(this.value)||1);render()"></div></div>${state.mode==="animevs"?`<div class="option-block"><label>${state.language==="de"?"Charaktere je Anime":"Characters per anime"}</label><div class="segmented">${[5,10,15,20].map(n=>`<button class="${state.animeVsTeamSize===n?"active":""}" onclick="state.animeVsTeamSize=${n};render()">${n}</button>`).join("")}</div><small>${state.language==="de"?"Nach Möglichkeit bis zu 20 unterschiedliche Figuren pro Team.":"Up to 20 unique characters per team when available."}</small></div>`:""}${state.mode==="worldcup"?`<div class="option-block"><label>${state.language==="de"?"Aufsteiger pro Gruppe":"Qualifiers per group"}</label><div class="segmented">${[1,2,3,4].map(n=>`<button class="${state.wcQualifiers===n?"active":""}" onclick="state.wcQualifiers=${n};render()">${n}</button>`).join("")}</div></div><div class="option-block"><label>Anime-Seeding</label><div class="segmented"><button class="${state.wcAnimeSeeding?"active":""}" onclick="state.wcAnimeSeeding=true;render()">${state.language==="de"?"Aktiv":"On"}</button><button class="${!state.wcAnimeSeeding?"active":""}" onclick="state.wcAnimeSeeding=false;render()">${state.language==="de"?"Aus":"Off"}</button></div></div>`:""}${state.mode==="vs"||state.mode==="kmm"?`<div class="option-block">${autoControls()}</div>`:""}</div>${!ready?`<div class="setup-warning">${tournamentFavorites?(state.language==="de"?"Markiere mindestens zwei Favoriten.":"Mark at least two favorites."):requiresTwo?(state.language==="de"?"Wähle mindestens zwei Anime im Pool.":"Select at least two anime in the pool."):(state.language==="de"?"Wähle mindestens einen Anime im Pool.":"Select at least one anime in the pool.")}</div>`:""}<button class="launch" ${state.busy||!ready?"disabled":""} onclick="startGame()">${state.busy?(state.language==="de"?"WIRD VORBEREITET …":"PREPARING …"):`${tr("startGame")} →`}</button></section>`;
+}
+function renderLoadQuality(){const q=state.loadingQuality||{},offline=getOfflineSummary(),sources=Object.entries(q.sources||{}).map(([k,v])=>`${k} ${v}`).join(" · ");return `<div class="quality-strip ${q.status||"idle"}"><span class="quality-dot"></span><div><b>${state.offlineMode?(state.language==="de"?"Offline-Modus":"Offline mode"):q.status==="loading"?(state.language==="de"?"Daten werden geprüft":"Checking data"):q.status==="ready"?(state.language==="de"?"Datenqualität: vollständig":"Data quality: complete"):q.status==="partial"?(state.language==="de"?"Datenqualität: teilweise":"Data quality: partial"):(state.language==="de"?"Datenquelle bereit":"Data source ready")}</b><small>${sources||`${offline.anime} ${state.language==="de"?"Anime offline":"anime offline"} · ${offline.characters} ${state.language==="de"?"Charaktere":"characters"}`}${q.duplicates?` · ${q.duplicates} ${state.language==="de"?"Dubletten entfernt":"duplicates removed"}`:""}</small></div></div>`}
+function renderSetupV65(){
+ const offline=getOfflineSummary(),cards=state.anime.map(a=>`<button class="anime-tile ${state.selected.has(a.idMal)?"active":""}" onclick="toggle(${a.idMal})">${a.image?`<img src="${esc(a.image)}" alt="">`:`<img src="${NO_IMAGE}" alt="">`}<span>${esc(a.title)}</span><i>${state.selected.has(a.idMal)?"✓":"+"}</i><u onclick="event.stopPropagation();removeAnime(${a.idMal})">×</u><em onclick="event.stopPropagation();openPool(${a.idMal})">Pool</em></button>`).join("");
+ const search=state.searchResults.length?`<div class="search-results">${state.searchResults.map(a=>`<article><img src="${esc(a.image||NO_IMAGE)}" alt=""><div><b>${esc(a.title)}</b><span>MAL #${a.idMal}</span></div><button onclick="addSearchAnime(${a.idMal})">${state.language==="de"?"Hinzufügen":"Add"}</button></article>`).join("")}</div>`:"";
+ const modes=[{id:"vs",icon:"⚔",title:"Character VS",copy:state.language==="de"?"Direkte Duelle ohne Wiederholungen.":"Direct matchups without repeats."},{id:"kmm",icon:"💍",title:"Kiss · Marry · Kill",copy:state.language==="de"?"Drei Figuren, drei Entscheidungen.":"Three characters, three choices."},{id:"tournament",icon:"🏆",title:"Tournament",copy:state.language==="de"?"K.-o.-Turnier aus Pool oder Favoriten.":"Knockout bracket from pool or favorites."},{id:"worldcup",icon:"🌐",title:state.language==="de"?"Weltmeisterschaft":"World Cup",copy:state.language==="de"?"Gruppenphase und Live-Turnierbaum.":"Group stage and live bracket."},{id:"blind",icon:"◉",title:"Blind Ranking",copy:state.language==="de"?"Plätze vergeben, bevor du alles kennst.":"Assign ranks before seeing everyone."},{id:"smash",icon:"♥",title:"Smash or Pass",copy:state.language==="de"?"Schnelle Einzelentscheidungen.":"Fast one-by-one decisions."},{id:"animevs",icon:"✦",title:"Anime vs Anime",copy:state.language==="de"?"Anime-Teams mit bis zu 20 Figuren.":"Anime teams with up to 20 characters."}];
+ return `<main class="page setup-page v65-setup"><header class="home-banner" style="--banner:url('${ASSET_BANNER}')"><div><span class="eyebrow">THE ANIME PARTY APP · V6.5</span><h1>ANIME <em>GAMEZ</em></h1><p>${state.language==="de"?"Baue deinen Pool, wähle danach einen Modus und passe nur dessen Regeln an.":"Build your pool, then choose a mode and configure only its rules."}</p></div></header><section class="panel pool-first"><div class="section-title"><b>01</b><div><h2>${tr("pool")}</h2><p>${tr("poolHint")}</p></div></div><div class="pool-tools"><article class="random-tool"><div><span>🎲</span><div><b>${tr("random")}</b><small>${state.language==="de"?"Lädt nur Anime in den Pool. Es startet kein Spiel.":"Only loads anime into the pool. It does not start a game."}</small></div></div><div class="random-mix-actions"><div class="random-count">${[10,20,30].map(n=>`<button class="${state.randomAnimeCount===n?"active":""}" onclick="state.randomAnimeCount=${n};render()">${n}</button>`).join("")}</div><button class="random-load" ${state.busy?"disabled":""} onclick="loadRandomAnimeMix()">${state.language==="de"?"ZUFÄLLIG LADEN":"LOAD RANDOM"}</button></div></article><article class="manual-tool"><div class="input-row"><input id="search" value="${esc(state.searchText)}" placeholder="${tr("search")}, z. B. Tokyo Ghoul" autocomplete="off" enterkeyhint="search" oninput="state.searchText=this.value;if(this.value.trim().length<2)state.searchResults=[]" onkeydown="if(event.key==='Enter'){event.preventDefault();doSearch()}"><button onclick="doSearch()">${state.language==="de"?"Suchen":"Search"}</button></div>${search}<div class="pool-file-actions"><button class="ghost" onclick="exportAnimePool()">${state.language==="de"?"Pool exportieren":"Export pool"}</button><label class="ghost file-label">${state.language==="de"?"Pool importieren":"Import pool"}<input type="file" accept="application/json,.json" onchange="importAnimePoolFile(this)"></label></div></article></div><div class="offline-tool"><div><span class="offline-icon">⇩</span><div><b>${tr("offline")}</b><small>${offline.anime} Anime · ${offline.characters} ${state.language==="de"?"Charaktere manuell gespeichert":"characters saved manually"}</small></div></div><div class="offline-actions"><label class="offline-switch"><input type="checkbox" ${state.offlineMode?"checked":""} onchange="setOfflineMode(this.checked)"><span>${state.language==="de"?"Nur Offline-Daten":"Offline data only"}</span></label><button class="ghost" ${state.busy||!state.selected.size?"disabled":""} onclick="downloadSelectedOffline()">${state.language==="de"?"Auswahl offline speichern":"Save selection offline"}</button><button class="ghost" onclick="exportOfflinePackage()">${state.language==="de"?"Paket exportieren":"Export package"}</button><label class="ghost file-label">${state.language==="de"?"Paket importieren":"Import package"}<input type="file" accept="application/json,.json" onchange="importOfflinePackageFile(this)"></label></div></div>${renderLoadQuality()}${state.message?`<p class="message">${esc(state.message)}</p>`:""}${state.anime.length?`<div class="pool-summary"><div><b>${state.selected.size} / ${state.anime.length} ${state.language==="de"?"Anime aktiv":"anime active"}</b><span>${state.poolCollapsed?(state.language==="de"?"Pool ist verborgen – ideal für eine Überraschungsrunde.":"Pool is hidden for a surprise game."):(state.language==="de"?"Tippe auf Anime, um sie ein- oder auszuschalten.":"Tap anime to include or exclude them.")}</span></div><div><button class="ghost" onclick="all()">${state.selected.size===state.anime.length?(state.language==="de"?"Alle abwählen":"Clear all"):(state.language==="de"?"Alle auswählen":"Select all")}</button><button class="ghost collapse-button" onclick="togglePoolCollapsed()">${state.poolCollapsed?(state.language==="de"?"Pool anzeigen ↓":"Show pool ↓"):(state.language==="de"?"Pool einklappen ↑":"Collapse pool ↑")}</button></div></div>${state.poolCollapsed?"":`<div class="anime-grid pool-reveal">${cards}</div>`}`:""}</section><section class="panel modes-step"><div class="section-title"><b>02</b><div><h2>${tr("chooseMode")}</h2><p>${tr("chooseModeHint")}</p></div><span class="mode-count">7 MODI</span></div><div class="v65-mode-grid">${modes.map(m=>`<button class="v65-mode-card ${state.mode===m.id?"active":""}" onclick="selectMode('${m.id}')"><span>${m.icon}</span><div><b>${m.title}</b><small>${m.copy}</small></div><em>›</em></button>`).join("")}</div></section>${renderModeOptionsV65()}${state.previewAnime?`<div class="modal" id="poolModal"></div>`:""}</main>`;
+}
+async function startGame(){
+ if(!state.mode){state.message=state.language==="de"?"Wähle zuerst einen Spielmodus.":"Choose a game mode first.";render();return}
+ const favoriteTournament=state.mode==="tournament"&&state.tournamentSource==="favorites";
+ const chosen=state.anime.filter(a=>state.selected.has(a.idMal));
+ if(!favoriteTournament&&!chosen.length){state.message=state.language==="de"?"Wähle mindestens einen Anime aus.":"Select at least one anime.";render();return}
+ state.busy=true;state.loadingQuality={status:"loading",loaded:0,total:favoriteTournament?1:chosen.length,failed:0,duplicates:0,sources:{}};state.message=state.language==="de"?"Charakter-Pools werden vorbereitet …":"Preparing character pools …";render();
+ try{
+  const pools=new Map(),seen=new Set(),failed=[];let duplicates=0;
+  if(favoriteTournament){
+   const target=state.gender==="MALE"?"Male":state.gender==="FEMALE"?"Female":null;
+   const favorites=getFavoriteCharacters().filter(c=>(!target||c.gender===target)&&!state.locked.has(c.id)).filter(c=>{if(!acceptUniqueCharacter(c,seen)){duplicates++;return false}return true});
+   if(favorites.length<2)throw new Error(state.language==="de"?"Für ein Favoriten-Turnier werden mindestens zwei passende Favoriten benötigt.":"A favorites tournament needs at least two matching favorites.");
+   pools.set("favorites",favorites);state.loadingQuality.loaded=1;state.loadingQuality.sources.favorites=1;
+  }else{
+   const perAnimeLimit=state.mode==="animevs"?Math.max(1,Math.min(20,Number(state.animeVsTeamSize)||20)):10;
+   for(let i=0;i<chosen.length;i++){
+    const anime=chosen[i];updateGlobalLoading(`${state.language==="de"?"Charaktere werden geladen":"Loading characters"} (${i+1}/${chosen.length}) · ${anime.title}`,"loading");
+    let raw;try{raw=await getCharacterPool(anime)}catch(e){failed.push(anime.title);state.loadingQuality.failed=failed.length;console.warn("Anime beim Spielstart übersprungen:",anime.title,e);continue}
+    const disabled=new Set(state.disabledByAnime[String(anime.idMal)]||[]);
+    const pool=buildPool(raw,state.gender,perAnimeLimit).filter(c=>{if(state.locked.has(c.id)||disabled.has(c.id))return false;if(!acceptUniqueCharacter(c,seen)){duplicates++;return false}return true});
+    if(pool.length)pools.set(anime.idMal,pool);else failed.push(anime.title);
+    state.loadingQuality.loaded=pools.size;state.loadingQuality.failed=failed.length;state.loadingQuality.duplicates=duplicates;state.loadingQuality.sources[__lastPoolSource]=(state.loadingQuality.sources[__lastPoolSource]||0)+1;
+    updateGlobalLoading(`${state.loadingQuality.loaded}/${chosen.length} ${state.language==="de"?"Anime bereit":"anime ready"} · ${__lastPoolSource}`,state.loadingQuality.failed?"partial":"loading");
+   }
+  }
+  if(!pools.size)throw new Error(state.offlineMode?(state.language==="de"?"Für diese Auswahl fehlen manuell gespeicherte Offline-Daten.":"This selection has no manually saved offline data."):(state.language==="de"?"Die Charakterdienste antworten gerade nicht. Bitte später erneut versuchen oder Anime manuell offline speichern.":"Character services are unavailable. Try again later or save anime data manually for offline use."));
+  const n=Math.max(1,Math.min(500,Number(state.roundCount)||25));
+  if(state.mode==="vs"){state.vsSession=createVsSession(pools,n);state.rounds=[]}
+  else if(state.mode==="kmm")state.rounds=createKmmSession(pools,n);
+  else if(state.mode==="blind"){state.rounds=createBlindSession(pools,Math.min(n,10));state.blindSlots=Array.from({length:state.rounds.length},(_,i)=>i+1)}
+  else if(state.mode==="tournament"){
+   const max=[...pools.values()].flat().length;if(n>max)throw new Error(`${state.language==="de"?"Maximal":"Maximum"} ${max} Tournament-${state.language==="de"?"Teilnehmer möglich":"participants available"}.`);state.tournament=createTournament(pools,n);state.rounds=[];
+  }else if(state.mode==="worldcup"){
+   const max=[...pools.values()].flat().length;if(n>max)throw new Error(`${state.language==="de"?"Maximal":"Maximum"} ${max} ${state.language==="de"?"Weltmeister-Teilnehmer möglich":"World Cup participants available"}.`);state.worldCup=createWorldCup(pools,n);state.worldUndo=[];state.rounds=[];setTimeout(saveWorldCup,0);
+  }else if(state.mode==="animevs"){
+   state.animeVs=createAnimeVsSession(pools,chosen,n);state.rounds=[];
+  }else state.rounds=createSession(pools,n);
+  state.index=0;state.screen="game";state.loadingQuality.status=failed.length?"partial":"ready";state.loadingQuality.duplicates=duplicates;state.message=failed.length?`${failed.length} ${state.language==="de"?"Anime wurden übersprungen":"anime were skipped"}.`:"";state.kmmChoices={};
+ }catch(e){state.loadingQuality.status="error";state.message=e.message;state.screen="setup"}finally{state.busy=false;state.randomStarting=false;render()}
+}
+function renderAppNav(){
+ const host=document.querySelector("#appNav");if(!host)return;const hide=state.screen==="game";
+ host.innerHTML=`<div class="app-topbar ${hide?"hidden":""}"><button class="top-brand" onclick="navigate('setup')"><img src="${APP_LOGO}" alt="Anime Gamez"><span><b>ANIME GAMEZ</b><small>アニメゲームズ</small></span></button><div class="topbar-actions"><label class="language-picker"><span>🌐</span><select aria-label="Language" onchange="setLanguage(this.value)"><option value="de" ${state.language==="de"?"selected":""}>DE</option><option value="en" ${state.language==="en"?"selected":""}>EN</option></select></label><button class="hamburger ${state.mainMenuOpen?"open":""}" aria-label="${tr("menu")}" aria-expanded="${state.mainMenuOpen}" onclick="toggleMainMenu()"><i></i><i></i><i></i></button></div></div>${state.mainMenuOpen&&!hide?`<div class="main-drawer-backdrop" onclick="if(event.target===this)toggleMainMenu(false)"><aside class="main-drawer"><span class="drawer-title">ANIME GAMEZ ${tr("menu")}</span><nav class="drawer-nav"><button class="${state.screen==='setup'?'active':''}" onclick="navigate('setup')"><span>⌂</span><span><strong>${tr("start")}</strong><small>${tr("startSub")}</small></span><em>›</em></button><button class="${state.screen==='stats'?'active':''}" onclick="navigate('stats')"><span>▥</span><span><strong>${tr("stats")}</strong><small>${tr("statsSub")}</small></span><em>›</em></button><button class="${state.screen==='favorites'?'active':''}" onclick="navigate('favorites')"><span>★</span><span><strong>${tr("favorites")}</strong><small>${tr("favoritesSub")}</small></span><em>›</em></button><button class="${state.screen==='info'?'active':''}" onclick="navigate('info')"><span>ⓘ</span><span><strong>${tr("info")}</strong><small>${tr("infoSub")}</small></span><em>›</em></button></nav><div class="drawer-divider"></div><div class="drawer-note">${state.language==="de"?"Kostenloses, inoffizielles Fanprojekt. Inhalte gehören ihren jeweiligen Rechteinhabern.":"Free, unofficial fan project. Content belongs to its respective rights holders."}</div></aside></div>`:""}`;
+}
+function navigate(screen){state.mainMenuOpen=false;state.screen=screen;render()}
+function toggleMainMenu(force){state.mainMenuOpen=typeof force==="boolean"?force:!state.mainMenuOpen;renderAppNav()}
+function render(){
+ clearAutoTimer();
+ renderAppNav();
+ // Wichtig auf Mobile: render() niemals bei jedem Tastendruck im Suchfeld aufrufen.
+ // Sonst wird das Input-DOM-Element ersetzt und iOS/Android schließt die Bildschirmtastatur.
+ const app=document.querySelector("#app");
+ if(state.screen==="favorites"){app.innerHTML=renderFavoritesV65();return}
+ if(state.screen==="stats"){app.innerHTML=renderStatsV65();return}
+ if(state.screen==="game"&&state.mode==="animevs"){app.innerHTML=renderAnimeVsGameV65();return}
+ if(state.screen==="results"&&state.mode==="animevs"){app.innerHTML=renderAnimeVsResultV65();return}
+ if(state.randomStarting){
+  app.innerHTML=`<main class="random-loading"><section class="random-loading-card"><img class="random-loading-logo" src="${APP_LOGO}" alt="Anime Gamez"><span class="eyebrow">ÜBERRASCHUNGSMODUS</span><div class="random-spinner"></div><h1>${esc(modeLabel(state.mode))} wird vorbereitet</h1><p>${esc(state.message||"Zufällige Anime und Charaktere werden geladen …")}</p><small>Die Auswahl bleibt bis zum Spielstart geheim</small></section></main>`;return;
+ }
+ if(state.screen==="favorites"){
+  const chars=Object.values(ensureStatsShape().characters).filter(c=>state.favorites.has(Number(c.id))||state.favorites.has(c.id));
+  app.innerHTML=`<main class="page"><header class="hero compact"><span class="eyebrow">DEINE SAMMLUNG</span><h1>Meine <em>Favoriten</em></h1><p>Alle Charaktere, die du während deiner Sessions markiert hast.</p></header><section class="panel"><div class="ranking-list">${chars.length?chars.map((c,i)=>`<article><strong>#${i+1}</strong><img src="${esc(c.image)}"><div><b>${esc(c.name)}</b><span>${esc(c.animeTitle)}</span></div><button class="fav-btn active" onclick="toggleFavorite(${JSON.stringify(c.id)})">★</button></article>`).join(""):`<div class="empty-state"><h3>Noch keine Favoriten</h3><p>Markiere Charaktere nach einer Runde mit dem Stern.</p></div>`}</div></section></main>`;return;
+ }
+ if(state.screen==="info"){
+  app.innerHTML=`<main class="page"><header class="hero compact"><span class="eyebrow">ÜBER DAS PROJEKT</span><h1>Anime <em>Gamez</em></h1><p>Ein kostenloses, inoffizielles Fanprojekt für Anime-Fans.</p></header><section class="panel legal-copy"><div class="section-title"><div><h2>Disclaimer</h2><p>Transparenz zu Inhalten und Datenquellen</p></div></div><p><strong>Anime Gamez ist ein nicht offizielles Fanprojekt.</strong> Alle dargestellten Charaktere, Namen, Bilder, Logos und Marken gehören ihren jeweiligen Rechteinhabern. Anime Gamez erhebt keinen Anspruch auf diese Inhalte und steht in keiner offiziellen Verbindung zu den jeweiligen Studios, Verlagen, Lizenzgebern oder Datenbankanbietern.</p><p>Charakter- und Anime-Daten werden über externe Datenbanken und APIs bereitgestellt. Die Verfügbarkeit einzelner Inhalte kann sich ändern. Rechteinhaber können die Entfernung betroffener Inhalte verlangen.</p></section><section class="info-grid"><article><h3>Kostenlos</h3><p>Die App ist als Fanprojekt ohne Werbung, In-App-Käufe oder bezahlte Spielvorteile gedacht.</p></article><article><h3>Datenspeicherung</h3><p>Pool, Favoriten und Statistiken werden lokal im Browser des Geräts gespeichert.</p></article></section></main>`;return;
+ }
+ if(state.screen==="stats"){
+  const s=ensureStatsShape();
+  const chars=Object.values(s.characters).sort((a,b)=>b.selected-a.selected||b.wins-a.wins);
+  const anime=Object.entries(s.anime).sort((a,b)=>b[1].selected-a[1].selected||b[1].wins-a[1].wins);
+  const fav=getFavoriteChar(),hate=getHatedChar(),nemesis=getTopNemesis();
+  const favDom=fav?getDominatedOpponent(Object.keys(s.characters).find(id=>s.characters[id]===fav)):null;
+  const modeEntries=Object.entries(s.modeCounts).sort((a,b)=>b[1]-a[1]);
+  const bestRate=chars.filter(c=>c.appearances>=3).sort((a,b)=>pct(b.wins,b.appearances)-pct(a.wins,a.appearances)||b.appearances-a.appearances)[0];
+  const mostSeen=[...chars].sort((a,b)=>b.appearances-a.appearances)[0];
+  const mostMarried=[...chars].sort((a,b)=>(b.marry||0)-(a.marry||0))[0];
+  const mostKilled=[...chars].sort((a,b)=>(b.kill||0)-(a.kill||0))[0];
+  const blindKing=[...chars].filter(c=>c.rankCount).sort((a,b)=>(b.rankPoints/b.rankCount)-(a.rankPoints/a.rankCount))[0];
+  app.innerHTML=`<main class="page"><header class="hero app-hero">
+      <div class="brand-lockup">
+        <span class="brand-kicker">WELCOME TO</span>
+        <h1>ANIME <em>GAMEZ</em></h1>
+        <small>アニメゲームズ</small>
+      </div>
+      <p>Wähle deinen Modus. Stelle deinen Anime-Pool zusammen. Finde deine Favoriten.</p>
+      <div class="hero-actions">
+        <button class="hero-chip" onclick="openStats()">▥ Statistiken</button>
+        <button class="hero-chip" onclick="state.screen='favorites';render()">★ Favoriten</button>
+      </div>
+    </header>
+  <section class="stats-highlight-grid">
+   ${fav?`<article class="stat-highlight favorite"><small>LIEBLINGS-CHAR</small><img src="${esc(fav.image)}"><h2>${esc(fav.name)}</h2><p>${esc(fav.animeTitle)}</p><b>${fav.selected}× gewählt · ${fav.wins} Siege</b>${favDom?`<span>Am häufigsten gewonnen gegen ${esc(favDom.other.name)} (${favDom.wins}×)</span>`:""}</article>`:""}
+   ${hate?`<article class="stat-highlight hated"><small>HASS-CHAR</small><img src="${esc(hate.image)}"><h2>${esc(hate.name)}</h2><p>${esc(hate.animeTitle)}</p><b>${hate.rejected}× abgelehnt · ${hate.losses} Niederlagen</b></article>`:""}
+   ${nemesis?`<article class="stat-highlight"><small>HÄUFIGSTES DUELL</small><div class="versus-mini"><img src="${esc(nemesis.a.image)}"><strong>VS</strong><img src="${esc(nemesis.b.image)}"></div><h2>${esc(nemesis.a.name)} vs ${esc(nemesis.b.name)}</h2><b>${nemesis.total} Begegnungen</b><span>${nemesis.aw}:${nemesis.bw}</span></article>`:""}
+  </section>
+  <section class="panel"><div class="section-title"><div><h2>Weitere Highlights</h2></div></div><div class="stats-cards">
+   ${bestRate?`<div><small>BESTE SIEGQUOTE</small><b>${esc(bestRate.name)}</b><span>${pct(bestRate.wins,bestRate.appearances)}% bei ${bestRate.appearances} Auftritten</span></div>`:""}
+   ${mostSeen?`<div><small>MEISTGESEHEN</small><b>${esc(mostSeen.name)}</b><span>${mostSeen.appearances} Auftritte</span></div>`:""}
+   <div><small>AKTIVSTER MODUS</small><b>${modeEntries[0]?.[0]||"—"}</b><span>${modeEntries[0]?.[1]||0} Entscheidungen</span></div>
+   <div><small>SMASH-RATE</small><b>${pct(s.actions.smash||0,(s.actions.smash||0)+(s.actions.pass||0))}%</b><span>${s.actions.smash||0} Smash · ${s.actions.pass||0} Pass</span></div>
+   ${mostMarried?.marry?`<div><small>HEIRATSMATERIAL</small><b>${esc(mostMarried.name)}</b><span>${mostMarried.marry}× Marry</span></div>`:""}
+   ${mostKilled?.kill?`<div><small>MEIST GEKILLT</small><b>${esc(mostKilled.name)}</b><span>${mostKilled.kill}× Kill</span></div>`:""}
+   ${blindKing?`<div><small>BLIND-RANKING-STAR</small><b>${esc(blindKing.name)}</b><span>Ø ${((blindKing.rankPoints/blindKing.rankCount)).toFixed(1)} Ranking-Punkte</span></div>`:""}
+  </div></section>
+  <section class="panel"><div class="section-title"><div><h2>Charakter-Ranking</h2><p>Über alle Modi hinweg.</p></div></div><div class="ranking-list">${chars.length?chars.slice(0,100).map((c,i)=>`<article><strong>#${i+1}</strong><img src="${esc(c.image)}"><div><b>${esc(c.name)}</b><span>${esc(c.animeTitle)} · ${c.selected} gewählt · ${c.rejected} abgelehnt · ${c.wins} Siege · ${pct(c.wins,c.appearances)}%</span></div></article>`).join(""):"<p>Noch keine Entscheidungen gespeichert.</p>"}</div></section>
+  <section class="panel"><div class="section-title"><div><h2>Anime-Präferenzen</h2></div></div><div class="stat-anime">${anime.map(([name,a],i)=>`<div><strong>#${i+1}</strong><span>${esc(name)}</span><b>${a.selected} gewählt · ${a.rejected} abgelehnt · ${a.worldTitles||0} Titel</b></div>`).join("")}</div></section></main>`;return;
+ }
+ if(state.screen==="game"){
+  if(state.mode==="blind"){
+   const c=state.rounds[state.index],used=new Set(state.rounds.map(x=>x.rank).filter(Boolean));
+   app.innerHTML=`<main class="game-shell game-view">${gameTopButtons()}<div class="progress-row"><span>BLIND RANKING</span><b>${state.index+1} / ${state.rounds.length}</b></div><div class="progress"><i style="width:${((state.index+1)/state.rounds.length)*100}%"></i></div><section class="character-card blind-card"><img src="${esc(c.image)}"><div class="shade"></div><div class="character-meta"><small>${esc(c.animeTitle)}</small><h1>${esc(c.name)}</h1></div></section><p class="rank-label">Wähle jetzt einen festen Platz:</p><div class="rank-buttons">${state.blindSlots.map(n=>`<button ${used.has(n)?"disabled":""} onclick="setBlindRank(${n})">${n}</button>`).join("")}</div>${worldOverlayHtml()}${gameSettingsOverlay()}</main>`;return;
+  }
+  if(state.mode==="worldcup"){
+   const w=state.worldCup;
+   if(w.stage==="group_tiebreak"){
+    const tb=w.tiebreak,g=w.groups[tb.groupIndex];
+    app.innerHTML=`<main class="page"><header class="hero compact wc-hero"><span class="eyebrow">GRUPPE ${g.name} · TIEBREAK</span><h1>Wähle die <em>Aufsteiger</em></h1><p>${tb.slots===1?"Wähle einen Charakter für den verbleibenden Platz.":`Wähle ${tb.slots} Charaktere.`}</p>${renderMiniBracket(w)}${worldActionBar()}</header><section class="panel"><div class="tiebreak-grid">${tb.candidates.map(c=>`<button class="tiebreak-card ${tb.selected.includes(c.id)?"selected":""}" onclick="toggleTiebreakCandidate(${c.id})"><img src="${esc(c.image)}"><div><small>${esc(c.animeTitle)}</small><h3>${esc(c.name)}</h3><span>${tb.selected.includes(c.id)?"✓ Ausgewählt":"Auswählen"}</span></div></button>`).join("")}</div><button class="primary full" ${tb.selected.length!==tb.slots?"disabled":""} onclick="confirmTiebreak()">Aufsteiger bestätigen →</button></section>${renderWorldCupTree(w)}${worldOverlayHtml()}${gameSettingsOverlay()}</main>`;return;
+   }
+   if(w.stage==="groups"){
+    const g=w.groups[w.currentGroup],m=g.matches[w.currentMatch],table=groupSortedRows(g);
+    app.innerHTML=`<main class="kmm-shell wc-stage game-view">${gameTopButtons()}${renderMiniBracket(w)}${worldActionBar()}<div class="progress-row"><span>GRUPPE ${g.name}</span><b>Match ${w.currentMatch+1} / ${g.matches.length}</b></div><div class="progress"><i style="width:${((w.currentMatch+1)/Math.max(1,g.matches.length))*100}%"></i></div><div class="duel-grid animate-in">${[m.a,m.b].map(c=>`<button class="duel-card" onclick="chooseWorldCup(${c.id})"><img src="${esc(c.image)}"><div><small>${esc(c.animeTitle)}</small><h2>${esc(c.name)}</h2><span>GEWINNER WÄHLEN</span></div></button>`).join("")}</div><section class="panel group-table"><h3>Gruppe ${g.name}</h3>${table.map((x,i)=>`<div class="${i<2?"qualifying":""}"><strong>${i+1}</strong><span>${esc(x.character.name)}</span><b>${x.points} P</b></div>`).join("")}<small>Top ${w.qualifiersPerGroup} steigen auf. Bei Gleichstand entscheidest du.</small></section>${renderWorldCupTree(w)}${worldOverlayHtml()}${gameSettingsOverlay()}</main>`;return;
+   }
+   if(w.stage==="third_place"||w.stage==="final"){
+    const pair=w.stage==="third_place"?w.thirdPlace:w.finalists;
+    const title=w.stage==="third_place"?"SPIEL UM PLATZ 3":"FINALE";
+    app.innerHTML=`<main class="kmm-shell wc-stage game-view">${gameTopButtons()}${renderMiniBracket(w)}${worldActionBar()}<div class="progress-row"><span>${title}</span><b>${w.stage==="third_place"?"Bronze":"Titel"}</b></div><div class="duel-grid animate-in">${pair.map(c=>`<button class="duel-card" onclick="chooseWorldCup(${c.id})"><img src="${esc(c.image)}"><div><small>${esc(c.animeTitle)}</small><h2>${esc(c.name)}</h2><span>${w.stage==="third_place"?"PLATZ 3":"WELTMEISTER"} WÄHLEN</span></div></button>`).join("")}</div>${renderWorldCupTree(w)}${worldOverlayHtml()}${gameSettingsOverlay()}</main>`;return;
+   }
+   const t=w.knockout,pair=getWorldCupCurrentPair();
+   const total=Math.max(1,t.roundSize/2),matchNo=Math.floor(t.currentPairIndex/2)+1;
+   app.innerHTML=`<main class="kmm-shell wc-stage game-view">${gameTopButtons()}${renderMiniBracket(w)}${worldActionBar()}<div class="progress-row"><span>${worldCupRoundLabel(t.roundSize)}</span><b>Match ${matchNo} / ${total}</b></div><div class="progress"><i style="width:${(matchNo/total)*100}%"></i></div><div class="bracket-status"><span>${w.qualifiers.length} Qualifizierte</span><span>${t.roundSize-w.qualifiers.length>0&&t.history.length===0?`${t.roundSize-w.qualifiers.length} Freilose`:worldCupRoundLabel(t.roundSize)}</span></div><div class="duel-grid animate-in">${pair.map(c=>`<button class="duel-card" onclick="chooseWorldCup(${c.id})"><img src="${esc(c.image)}"><div><small>${esc(c.animeTitle)}</small><h2>${esc(c.name)}</h2><span>WEITER WÄHLEN</span></div></button>`).join("")}</div>${renderWorldCupTree(w)}${worldOverlayHtml()}${gameSettingsOverlay()}</main>`;return;
+  }
+  if(state.mode==="vs"){
+   const v=state.vsSession;
+   if(!v?.pairs?.length){state.message="Die VS-Runde konnte nicht geladen werden.";state.screen="setup";render();return}
+   const pair=v.pairs[v.index],cin=state.autoMode&&state.cinematicMode;
+   app.innerHTML=`<main class="kmm-shell game-view ${cin?"cinematic":""}">${gameTopButtons()}${countdownWidget("NÄCHSTES PAAR")}<div class="game-info"><div class="progress-row"><span>CHARACTER VS</span><b>Paar ${v.index+1} / ${v.pairs.length}</b></div><div class="progress"><i style="width:${((v.index+1)/v.pairs.length)*100}%"></i></div><p class="tournament-note">${v.initialSize} Charaktere · ${v.pairs.length} unabhängige Duelle · jeder Charakter kommt genau einmal vor</p></div><div class="duel-grid scene-transition">${[pair.a,pair.b].map(c=>`<button class="duel-card" ${state.autoMode?"disabled":""} onclick="${state.autoMode?"":`chooseVs(${c.id})`}"><img src="${esc(c.image)}"><div><small>${esc(c.animeTitle)}</small><h2>${esc(c.name)}</h2><span>${state.autoMode?"VS":"WÄHLEN"}</span></div></button>`).join("")}</div>${gameSettingsOverlay()}</main>`;
+   setTimeout(scheduleAutoAdvance,0);return;
+  }
+  if(state.mode==="tournament"){
+   const t=state.tournament,pair=t.remaining.slice(0,2);
+   const decided=t.next.length, remainingMatches=Math.floor(t.remaining.length/2), totalMatches=decided+remainingMatches;
+   app.innerHTML=`<main class="kmm-shell game-view">${gameTopButtons()}<div class="progress-row"><span>CHARACTER TOURNAMENT · K.O.-RUNDE ${t.match}</span><b>Duell ${decided+1} / ${Math.max(1,totalMatches)}</b></div><div class="progress"><i style="width:${Math.min(100,((decided+1)/Math.max(1,totalMatches))*100)}%"></i></div><p class="tournament-note">${t.initialSize} Startplätze · Gewinner kommen in die nächste K.O.-Runde</p>${state.autoMode?`<div class="video-badge">AUTO · NÄCHSTES PAAR IN ${state.autoSeconds} SEKUNDEN</div>`:""}<div class="duel-grid">${pair.map(c=>`<button class="duel-card" onclick="${state.autoMode?"":`chooseTournament(${c.id})`}"><img src="${esc(c.image)}"><div><small>${esc(c.animeTitle)}</small><h2>${esc(c.name)}</h2><span>WÄHLEN</span></div></button>`).join("")}</div>${worldOverlayHtml()}${gameSettingsOverlay()}</main>`;return;
+  }
+  if(state.mode==="kmm"){
+   const round=state.rounds[state.index],cin=state.autoMode&&state.cinematicMode;
+   const cards=round.characters.map(c=>{const choice=round.choices[c.id];return `<article class="kmm-card"><img src="${esc(c.image)}" alt="${esc(c.name)}"><div class="kmm-meta"><small>${esc(c.animeTitle)}</small><h2>${esc(c.name)}</h2></div>${state.autoMode?"":`<div class="kmm-actions"><button class="${choice==="kiss"?"active kiss":""}" onclick="chooseKmm(${c.id},'kiss')">💋 Kiss</button><button class="${choice==="marry"?"active marry":""}" onclick="chooseKmm(${c.id},'marry')">💍 Marry</button><button class="${choice==="kill"?"active kill":""}" onclick="chooseKmm(${c.id},'kill')">☠ Kill</button></div>`}</article>`}).join("");
+   app.innerHTML=`<main class="kmm-shell game-view ${cin?"cinematic":""}">${gameTopButtons()}${countdownWidget("NÄCHSTE GRUPPE")}<div class="game-info"><div class="progress-row"><span>KISS · MARRY · KILL</span><b>Runde ${state.index+1} / ${state.rounds.length}</b></div><div class="progress"><i style="width:${((state.index+1)/state.rounds.length)*100}%"></i></div></div><div class="kmm-grid scene-transition">${cards}</div>${state.autoMode?"":`<button class="launch" ${Object.keys(round.choices).length===3?"":"disabled"} onclick="nextKmm()">NÄCHSTE RUNDE →</button>`}${gameSettingsOverlay()}</main>`;setTimeout(scheduleAutoAdvance,0);return;
+  }
+  const c=state.rounds[state.index],pct=((state.index+1)/state.rounds.length)*100;
+  app.innerHTML=`<main class="game-shell game-view">${gameTopButtons()}<div class="progress-row"><span>SMASH / PASS</span><b>Runde ${state.index+1} / ${state.rounds.length}</b></div><div class="progress"><i style="width:${pct}%"></i></div><section class="character-card"><img src="${esc(c.image)}" alt="${esc(c.name)}"><div class="shade"></div><div class="character-meta"><small>${esc(c.animeTitle)}</small><h1>${esc(c.name)}</h1></div></section><div class="actions"><button class="pass" onclick="decide('pass')"><span>✕</span> PASS</button><button class="smash" onclick="decide('smash')"><span>♥</span> SMASH</button></div><p class="hint">← Pass &nbsp; • &nbsp; Smash →</p>${worldOverlayHtml()}${gameSettingsOverlay()}</main>`;return;
+ }
+ if(state.screen==="results"){
+  if(state.mode==="blind"){
+   const ranked=[...state.rounds].sort((a,b)=>a.rank-b.rank);
+   app.innerHTML=`<main class="page"><header class="hero compact"><span class="eyebrow">BLIND RANKING COMPLETE</span><h1>Your <em>Ranking</em></h1><div class="result-actions"><button class="primary" onclick="repeatSession()">↻ Wiederholen</button><button class="primary secondary" onclick="state.screen='setup';render()">Einstellungen</button></div></header><section class="panel"><div class="ranking-list">${ranked.map(c=>`<article><strong>#${c.rank}</strong><img src="${esc(c.image)}"><div><b>${esc(c.name)}</b><span>${esc(c.animeTitle)}</span></div><button class="fav-btn ${state.favorites.has(c.id)?"active":""}" onclick="toggleFavorite(${c.id})">★</button><button class="lock-btn ${state.locked.has(c.id)?"active":""}" onclick="toggleLock(${c.id})">${state.locked.has(c.id)?"🔒":"🔓"}</button></article>`).join("")}</div></section></main>`;return;
+  }
+  if(state.mode==="worldcup"){
+   const w=state.worldCup;
+   const podium=[w.winner,w.runnerUp,w.third,w.fourth].filter(Boolean);
+   app.innerHTML=`<main class="page"><header class="hero compact wc-hero"><span class="eyebrow">WELTMEISTERSCHAFT BEENDET</span><h1>World <em>Champion</em></h1></header><section class="podium">${podium.slice(0,3).map((c,i)=>`<article class="podium-${i+1}"><span>#${i+1}</span><img src="${esc(c.image)}"><h2>${esc(c.name)}</h2><p>${esc(c.animeTitle)}</p></article>`).join("")}</section><section class="panel"><div class="ranking-list">${podium.map((c,i)=>`<article><strong>#${i+1}</strong><img src="${esc(c.image)}"><div><b>${esc(c.name)}</b><span>${esc(c.animeTitle)}</span></div></article>`).join("")}</div><div class="result-actions"><button class="primary" onclick="repeatSession()">↻ Wiederholen</button><button class="primary secondary" onclick="state.screen='setup';render()">Einstellungen</button></div></section></main>`;return;
+  }
+  if(state.mode==="vs"){
+   const v=state.vsSession;if(!v?.pairs?.length){state.screen="setup";render();return}const winners=v.pairs.filter(x=>x.winner).map(x=>x.winner),losers=v.pairs.filter(x=>x.loser).map(x=>x.loser);
+   app.innerHTML=`<main class="page"><header class="hero compact"><span class="eyebrow">VS SESSION COMPLETE</span><h1>${v.pairs.length} <em>Duelle</em></h1><p>Jeder Charakter ist genau einmal vorgekommen.</p><div class="result-actions"><button class="primary" onclick="repeatSession()">↻ Wiederholen</button><button class="primary secondary" onclick="state.screen='setup';render()">Einstellungen</button></div></header>${resultSection("Sieger",winners)}${resultSection("Unterlegen",losers)}</main>`;return;
+  }
+  if(state.mode==="tournament"){
+   const w=state.tournament?.winner;
+   const ranked=[...state.tournament.placements].sort((a,b)=>{
+    if(a.eliminatedRound===Infinity)return -1;
+    if(b.eliminatedRound===Infinity)return 1;
+    return b.eliminatedRound-a.eliminatedRound;
+   });
+   app.innerHTML=`<main class="page"><header class="hero compact"><span class="eyebrow">TOURNAMENT WINNER</span><h1>The <em>Champion</em></h1><div class="winner-card"><img src="${esc(w.image)}"><h2>${esc(w.name)}</h2><p>${esc(w.animeTitle)}</p><div><button class="fav-btn ${state.favorites.has(w.id)?"active":""}" onclick="toggleFavorite(${w.id})">★ Favorit</button><button class="lock-btn ${state.locked.has(w.id)?"active":""}" onclick="toggleLock(${w.id})">${state.locked.has(w.id)?"🔒":"🔓"} Sperren</button></div></div><div class="result-actions"><button class="primary" onclick="repeatSession()">↻ Wiederholen</button><button class="primary secondary" onclick="state.screen='setup';render()">Einstellungen</button></div></header><section class="panel"><div class="section-title"><div><h2>Platzierungen</h2><p>Sortiert nach erreichter K.-o.-Runde.</p></div></div><div class="ranking-list">${ranked.map((x,i)=>`<article><strong>#${i+1}</strong><img src="${esc(x.character.image)}"><div><b>${esc(x.character.name)}</b><span>${esc(x.character.animeTitle)} · ${x.eliminatedRound===Infinity?"Sieger":`Aus in Runde ${x.eliminatedRound}`}</span></div><button class="fav-btn ${state.favorites.has(x.character.id)?"active":""}" onclick="toggleFavorite(${x.character.id})">★</button><button class="lock-btn ${state.locked.has(x.character.id)?"active":""}" onclick="toggleLock(${x.character.id})">${state.locked.has(x.character.id)?"🔒":"🔓"}</button></article>`).join("")}</div></section></main>`;return;
+  }
+  if(state.mode==="kmm"){
+   const groups={kiss:[],marry:[],kill:[]};
+   for(const r of state.rounds)for(const c of r.characters){const ch=r.choices[c.id];if(ch)groups[ch].push(c)}
+   app.innerHTML=`<main class="page"><header class="hero compact"><span class="eyebrow">SESSION COMPLETE</span><h1>Kiss · Marry · <em>Kill</em></h1><p>${state.rounds.length} Runden gespielt</p><div class="result-actions"><button class="primary" onclick="repeatSession()">↻ Wiederholen</button><button class="primary secondary" onclick="state.screen='setup';render()">Einstellungen</button></div></header>${resultSection("💋 Kiss",groups.kiss)}${resultSection("💍 Marry",groups.marry)}${resultSection("☠ Kill",groups.kill)}</main>`;
+   return;
+  }
+  const smash=state.rounds.filter(r=>r.decision==="smash"),pass=state.rounds.filter(r=>r.decision==="pass"),pct=state.rounds.length?Math.round(smash.length/state.rounds.length*100):0;
+  app.innerHTML=`<main class="page"><header class="hero compact"><span class="eyebrow">SESSION COMPLETE</span><h1>${pct}% <em>Smash</em></h1><p>${smash.length} Smash · ${pass.length} Pass · ${state.rounds.length} Runden</p><div class="result-actions"><button class="primary" onclick="repeatSession()">↻ Wiederholen</button><button class="primary secondary" onclick="state.screen='setup';render()">Einstellungen</button></div></header>${resultSection("Smash",smash)}${resultSection("Pass",pass)}</main>`;return;
+ }
+ app.innerHTML=renderSetupV65();if(state.previewAnime)setTimeout(renderPreview,0);return;
+
+}
+window.addEventListener("error",e=>{const img=e.target;if(img?.tagName==="IMG"&&!img.dataset.fallbackApplied){img.dataset.fallbackApplied="1";img.classList.add("image-fallback");img.src=NO_IMAGE}},true);
+window.addEventListener("keydown",e=>{if(state.screen==="game"&&state.mode==="smash"){if(e.key==="ArrowLeft")decide("pass");if(e.key==="ArrowRight")decide("smash")}});
+render();
+
+// ===== Anime Gamez V6.4 global loading system =====
+let __loaderDepth=0,__loaderShownAt=0,__loaderTimer=null;
+function ensureGlobalLoader(){
+ if(document.getElementById('globalLoader'))return;
+ const el=document.createElement('div');el.id='globalLoader';
+ el.innerHTML=`<div class="global-loader-card"><img class="global-loader-logo" src="${APP_LOGO}" alt="Anime Gamez"><div class="global-loader-spinner"></div><h2 id="globalLoaderTitle">Anime Gamez lädt</h2><p id="globalLoaderText">Bitte einen Moment …</p><span class="global-loader-quality" id="globalLoaderQuality">Datenquelle wird geprüft</span><div class="global-loader-bar"><i></i></div></div>`;
+ document.body.appendChild(el);
+}
+function showGlobalLoading(text='Bitte einen Moment …',title='Anime Gamez lädt'){
+ ensureGlobalLoader();clearTimeout(__loaderTimer);__loaderDepth++;__loaderShownAt=Date.now();
+ document.getElementById('globalLoaderTitle').textContent=title;document.getElementById('globalLoaderText').textContent=text;
+ requestAnimationFrame(()=>document.getElementById('globalLoader').classList.add('show'));
+}
+function updateGlobalLoading(text,quality="loading"){const e=document.getElementById('globalLoaderText'),q=document.getElementById('globalLoaderQuality');if(e)e.textContent=text;if(q)q.textContent=quality==="partial"?(state.language==="de"?"Teilweise verfügbar":"Partially available"):quality==="download"?(state.language==="de"?"Manueller Offline-Download":"Manual offline download"):state.language==="de"?"Online · Cache · Offline-Fallback":"Online · cache · offline fallback"}
+function hideGlobalLoading(force=false){
+ __loaderDepth=force?0:Math.max(0,__loaderDepth-1);if(__loaderDepth>0)return;
+ const wait=Math.max(0,500-(Date.now()-__loaderShownAt));clearTimeout(__loaderTimer);__loaderTimer=setTimeout(()=>{const e=document.getElementById('globalLoader');if(e)e.classList.remove('show')},wait);
+}
+const __nativeFetch=window.fetch.bind(window);
+window.fetch=async(...args)=>{showGlobalLoading('Daten und Charaktere werden geladen …');try{return await __nativeFetch(...args)}finally{hideGlobalLoading()}};
+window.addEventListener('DOMContentLoaded',()=>{showGlobalLoading('App wird initialisiert …','Anime Gamez');setTimeout(()=>hideGlobalLoading(true),650)});
+
+</script>
+</body>
+</html>

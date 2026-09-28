@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 900" role="img" aria-labelledby="title desc">
+  <title id="title">No image</title>
+  <desc id="desc">Temporary Anime Gamez placeholder for missing character or anime artwork.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#17131f"/>
+      <stop offset="1" stop-color="#090a10"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#845cff"/>
+      <stop offset="1" stop-color="#ef5774"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="900" rx="44" fill="url(#bg)"/>
+  <path d="M70 700 208 525l86 104 71-82 165 153" fill="none" stroke="#2c2936" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="405" cy="318" r="58" fill="#24212d"/>
+  <rect x="175" y="255" width="250" height="250" rx="48" fill="none" stroke="url(#accent)" stroke-width="18" opacity=".9"/>
+  <path d="M245 380h110M300 325v110" stroke="#f2eaf7" stroke-width="18" stroke-linecap="round" opacity=".85"/>
+  <text x="300" y="780" fill="#aaa3b5" font-family="Arial, sans-serif" font-size="34" font-weight="700" letter-spacing="7" text-anchor="middle">NO IMAGE</text>
+</svg>
