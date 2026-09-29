@@ -4,6 +4,7 @@ Mobile-first Party- und Turnierspiel für Anime-Charaktere. Die aktuelle Arbeits
 
 ## Aktueller Stand V6.5.0
 
+THIS WEBSITE IS MADE WITH AI. THE ANIMES AND CHARACTERS ARE FROM A DATABASE AND NOT MINE
 - Einrichtungsablauf: Anime-Pool → Spielmodus → modusspezifische Optionen
 - Zufallsmix lädt nur den Anime-Pool und startet kein Spiel
 - Anime-Pool kann vollständig ein- und ausgeklappt werden
